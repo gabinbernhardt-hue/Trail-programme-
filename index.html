@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Trail Programme</title>
+
+<!-- PWA iPhone -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Trail Programme">
+<meta name="theme-color" content="#0a1510">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230e1a14'/%3E%3Ctext y='.9em' font-size='80' x='10'%3E🏔️%3C/text%3E%3C/svg%3E">
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a1510;
+  --bg2: #0e1a14;
+  --surface: #152018;
+  --surface2: #1c2d20;
+  --surface3: #243328;
+  --accent: #4ade80;
+  --accent2: #86efac;
+  --accent3: #d1fae5;
+  --warn: #fb923c;
+  --warn2: #fed7aa;
+  --danger: #f87171;
+  --blue: #60a5fa;
+  --text: #e2ede4;
+  --muted: #6b9070;
+  --border: #1e3024;
+  --border2: #2a3f2e;
+  --phase1: #ef4444;
+  --phase2: #f97316;
+  --phase3: #22c55e;
+  --phase4: #6366f1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+a { color: var(--accent); }
+strong { color: #fff; }
+
+/* ===== MAIN PAGE ===== */
+#mainPage { padding: 16px 16px 40px; }
+
+.hero {
+  background: linear-gradient(135deg, #1b4332, #0a2218);
+  border: 1px solid var(--border2);
+  padding: 28px 20px;
+  border-radius: 18px;
+  text-align: center;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% -20%, rgba(74,222,128,0.15) 0%, transparent 60%);
+}
+.hero-eyebrow { font-size: 0.68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 10px; }
+.hero h1 { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 900; color: #fff; margin-bottom: 6px; }
+.hero p { color: var(--muted); font-size: 0.85rem; }
+
+.nav-pills { display: flex; gap: 7px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none; }
+.nav-pills::-webkit-scrollbar { display: none; }
+.pill { flex-shrink: 0; padding: 5px 13px; border-radius: 20px; font-size: 0.73rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border2); background: var(--surface); color: var(--muted); text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+.pill:hover, .pill.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+.section-label { font-size: 0.63rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 24px 0 12px; padding-left: 2px; }
+
+/* Cards */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+.card h2 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.card-danger { border-left: 3px solid var(--danger); background: #1a0f0f; }
+.card-danger h2 { color: var(--danger); }
+.card-warn { border-left: 3px solid var(--warn); background: #1a1208; }
+.card-overview { background: linear-gradient(135deg, #162318, #1e3024); border: 1px solid #2d5038; }
+.card-progress { background: linear-gradient(135deg, #132018, #1c3228); border: 1px solid #2d5038; }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.mini-stat { background: var(--surface2); border-radius: 10px; padding: 12px; text-align: center; }
+.mini-stat .label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.mini-stat .value { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; color: var(--accent); }
+.mini-stat .value.red { color: var(--danger); }
+
+.diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+.rule-box { background: rgba(251,146,60,0.1); border: 1px solid rgba(251,146,60,0.3); border-radius: 10px; padding: 12px; margin: 10px 0; font-size: 0.83rem; color: var(--warn2); }
+
+/* Progress card */
+.prog-stat-row { display: flex; gap: 10px; margin: 12px 0; }
+.prog-stat { flex: 1; background: var(--surface3); border-radius: 10px; padding: 10px; text-align: center; }
+.prog-stat .ps-label { font-size: 0.63rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.prog-stat .ps-val { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+
+.prog-bar-wrap { margin: 10px 0; }
+.prog-bar-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 5px; }
+.prog-bar { height: 7px; background: var(--surface3); border-radius: 4px; overflow: hidden; }
+.prog-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), #22c55e); transition: width 0.5s ease; }
+
+.btn-tracker {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 12px; border-radius: 12px;
+  background: var(--accent); color: var(--bg);
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700;
+  border: none; cursor: pointer; margin-top: 12px;
+  transition: all 0.2s;
+}
+.btn-tracker:hover { background: var(--accent2); transform: translateY(-1px); }
+
+/* Phase titles */
+.phase-title { font-family: 'Fraunces', serif; font-size: 1.1rem; font-weight: 700; color: var(--accent); margin: 22px 0 10px; padding-left: 12px; border-left: 3px solid var(--accent); }
+
+/* Week cards */
+.week-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+.week-header { padding: 13px 16px; display: flex; align-items: center; justify-content: space-between; }
+.week-header h3 { font-size: 0.95rem; font-weight: 700; color: #fff; }
+.week-header .wkm { font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+.week-body { padding: 14px 16px; }
+.ph1 .week-header { background: linear-gradient(90deg, #7f1d1d, #991b1b); }
+.ph2 .week-header { background: linear-gradient(90deg, #7c2d12, #9a3412); }
+.ph3 .week-header { background: linear-gradient(90deg, #14532d, #15803d); }
+.ph4 .week-header { background: linear-gradient(90deg, #1e1b4b, #2e1065); }
+
+.sessions { display: flex; flex-direction: column; gap: 7px; margin: 10px 0; }
+.session { background: var(--surface2); border-radius: 8px; padding: 9px 12px; font-size: 0.82rem; display: flex; align-items: flex-start; gap: 10px; }
+.session-day { font-weight: 700; color: var(--accent); min-width: 26px; font-size: 0.75rem; text-transform: uppercase; }
+
+.tag-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.tag { font-size: 0.68rem; font-weight: 600; padding: 2px 9px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.3px; }
+.tg { background: rgba(74,222,128,0.15); color: var(--accent); }
+.to { background: rgba(251,146,60,0.15); color: var(--warn); }
+.tb { background: rgba(96,165,250,0.15); color: var(--blue); }
+.tr { background: rgba(248,113,113,0.15); color: var(--danger); }
+
+.sig-box { background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3); border-radius: 8px; padding: 10px 12px; font-size: 0.8rem; color: var(--danger); margin-top: 10px; }
+
+/* ===== EXERCISES SECTION ===== */
+.ex-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; margin-bottom: 13px; overflow: hidden; transition: border-color 0.2s; }
+.ex-card:hover { border-color: var(--accent); }
+.ex-header { padding: 16px 18px 13px; cursor: pointer; display: flex; align-items: flex-start; gap: 13px; }
+.ex-number { width: 32px; height: 32px; border-radius: 50%; font-family: 'Fraunces', serif; font-weight: 900; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.en-g { background: var(--accent); color: var(--bg); }
+.en-o { background: var(--warn); color: var(--bg); }
+.en-b { background: var(--blue); color: var(--bg); }
+.ex-meta { flex: 1; }
+.ex-name { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.ex-sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 7px; }
+.expand-btn { width: 26px; height: 26px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border2); color: var(--muted); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; transition: all 0.2s; cursor: pointer; }
+.ex-card.open .expand-btn { background: var(--accent); color: var(--bg); transform: rotate(45deg); }
+.ex-body { display: none; padding: 0 18px 18px; border-top: 1px solid var(--border); }
+.ex-card.open .ex-body { display: block; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+
+.visual-box { background: var(--surface2); border-radius: 10px; padding: 14px; margin: 12px 0; font-size: 0.82rem; }
+.v-title { font-size: 0.65rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+.position-art { font-family: monospace; font-size: 0.75rem; color: var(--accent2); background: rgba(74,222,128,0.05); border: 1px solid rgba(74,222,128,0.15); border-radius: 7px; padding: 10px; margin: 8px 0; white-space: pre; line-height: 1.5; text-align: center; overflow-x: auto; }
+.steps { counter-reset: step; margin: 8px 0; display: flex; flex-direction: column; gap: 7px; }
+.step { display: flex; gap: 10px; align-items: flex-start; }
+.step-num { width: 20px; height: 20px; border-radius: 50%; background: rgba(74,222,128,0.2); color: var(--accent); font-size: 0.68rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.step-text { font-size: 0.82rem; color: var(--text); line-height: 1.6; }
+.dosage { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin: 10px 0; }
+.dose-item { background: var(--surface2); border-radius: 9px; padding: 9px 7px; text-align: center; }
+.d-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.d-val { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: var(--accent); }
+.ok-box { background: rgba(74,222,128,0.07); border: 1px solid rgba(74,222,128,0.2); border-radius: 9px; padding: 10px 13px; margin-top: 10px; font-size: 0.8rem; color: var(--accent2); }
+.warn-box { background: rgba(251,146,60,0.08); border: 1px solid rgba(251,146,60,0.25); border-radius: 9px; padding: 10px 13px; margin-top: 8px; font-size: 0.8rem; color: var(--warn2); }
+
+/* ===== PLANNING SECTION ===== */
+.planning-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.day-row { cursor: pointer; transition: background 0.15s; display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.day-row:last-child { border-bottom: none; }
+.day-row:hover, .day-row.active { background: var(--surface2); }
+.day-label { font-weight: 700; color: var(--accent); width: 28px; font-size: 0.77rem; text-transform: uppercase; flex-shrink: 0; }
+.day-exs { flex: 1; font-size: 0.82rem; color: var(--text); }
+.day-time { font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+.day-chev { font-size: 0.72rem; color: var(--muted); transition: transform 0.2s; flex-shrink: 0; }
+.day-row.active .day-chev { transform: rotate(180deg); color: var(--accent); }
+.day-detail { display: none; background: var(--surface2); border-top: 1px solid var(--border); padding: 14px; animation: fadeIn 0.2s ease; }
+.day-detail.visible { display: block; }
+.mini-ex { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 9px; }
+.mini-ex:last-child { margin-bottom: 0; }
+.mini-ex-hdr { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+.mini-num { width: 24px; height: 24px; border-radius: 50%; font-family: 'Fraunces', serif; font-weight: 900; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.mn-g { background: var(--accent); color: var(--bg); }
+.mn-o { background: var(--warn); color: var(--bg); }
+.mn-b { background: var(--blue); color: var(--bg); }
+.mini-ex-name { font-weight: 600; font-size: 0.85rem; color: #fff; flex: 1; }
+.mini-dose { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; }
+.mini-dose-item { background: rgba(74,222,128,0.08); border: 1px solid rgba(74,222,128,0.15); border-radius: 6px; padding: 2px 8px; font-size: 0.7rem; color: var(--accent2); }
+.mini-steps { margin-top: 7px; display: flex; flex-direction: column; gap: 4px; }
+.mini-step { font-size: 0.78rem; color: var(--muted); line-height: 1.5; padding-left: 12px; position: relative; }
+.mini-step::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 0.65rem; top: 2px; }
+.rest-note { text-align: center; padding: 14px 12px; font-size: 0.85rem; color: var(--muted); }
+.rest-note .re { font-size: 1.7rem; display: block; margin-bottom: 6px; }
+
+.footer-note { text-align: center; font-size: 0.77rem; color: var(--muted); margin-top: 24px; padding: 16px; border-top: 1px solid var(--border); }
+hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+ul { padding-left: 18px; }
+ul li { margin-bottom: 4px; font-size: 0.85rem; color: var(--text); }
+
+/* ===== TRACKER PAGE ===== */
+#trackerPage {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 1000;
+  overflow-y: auto;
+  flex-direction: column;
+}
+#trackerPage.visible { display: flex; }
+
+.tr-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.tr-back { width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border2); color: var(--text); font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+.tr-back:hover { background: var(--accent); color: var(--bg); }
+.tr-title-wrap { flex: 1; }
+.tr-eyebrow { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.tr-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.2; }
+.tr-day-badge { background: var(--accent); color: var(--bg); font-family: 'Fraunces', serif; font-weight: 900; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; white-space: nowrap; }
+
+.tr-body { padding: 16px; flex: 1; }
+
+/* Charts */
+.charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; align-items: start; }
+.chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+.chart-title { font-size: 0.63rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 10px; }
+.week-bars { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.week-bar-row { display: flex; align-items: center; gap: 7px; }
+.wb-label { font-size: 0.65rem; color: var(--muted); font-weight: 600; width: 18px; flex-shrink: 0; }
+.wb-track { flex: 1; height: 8px; background: var(--surface3); border-radius: 4px; overflow: hidden; }
+.wb-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+.wb-km { font-size: 0.62rem; color: var(--muted); width: 26px; text-align: right; flex-shrink: 0; }
+
+/* Circular progress — CSS conic-gradient */
+.circ-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: conic-gradient(#4ade80 0% 0%, #1e3024 0% 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.5s ease;
+}
+.circ-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: var(--surface);
+}
+.circ-center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.circ-num { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 900; color: #fff; line-height: 1; }
+.circ-sub { font-size: 0.55rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+/* Quote + funfact */
+.qf-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+.quote-text { font-family: 'Fraunces', serif; font-size: 1rem; font-style: italic; color: var(--accent2); line-height: 1.5; margin-bottom: 10px; }
+.funfact-wrap { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; }
+.funfact-label { font-size: 0.62rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin-bottom: 5px; }
+.funfact-text { font-size: 0.82rem; color: var(--text); line-height: 1.6; }
+
+/* Day content */
+.day-section-label { font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 14px 0 9px; }
+
+/* Run block */
+.run-block { background: linear-gradient(135deg, #132018, #1a2e1e); border: 1px solid #2d5038; border-radius: 14px; padding: 16px; margin-bottom: 12px; }
+.run-block-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.run-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 10px; }
+.run-stat { background: var(--surface3); border-radius: 9px; padding: 8px; text-align: center; }
+.rs-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.rs-val { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: var(--accent); }
+.run-desc { font-size: 0.82rem; color: var(--text); line-height: 1.6; }
+.run-tip { font-size: 0.78rem; color: var(--muted); margin-top: 6px; font-style: italic; }
+
+/* Tracker exercise card */
+.tex-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; }
+.tex-hdr { padding: 14px 16px 12px; display: flex; align-items: flex-start; gap: 12px; }
+.tex-num { width: 30px; height: 30px; border-radius: 50%; font-family: 'Fraunces', serif; font-weight: 900; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.tex-meta { flex: 1; }
+.tex-name { font-family: 'Fraunces', serif; font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
+.tex-sub { font-size: 0.72rem; color: var(--muted); }
+.tex-body { padding: 0 16px 16px; border-top: 1px solid var(--border); }
+.tex-dosage { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin: 12px 0; }
+.tex-dose { background: var(--surface2); border-radius: 9px; padding: 8px; text-align: center; }
+.td-label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.td-val { font-family: 'Fraunces', serif; font-size: 0.95rem; font-weight: 700; color: var(--accent); }
+.tex-steps { display: flex; flex-direction: column; gap: 7px; margin: 10px 0; }
+.tex-step { display: flex; gap: 9px; align-items: flex-start; }
+.tex-step-n { width: 19px; height: 19px; border-radius: 50%; background: rgba(74,222,128,0.2); color: var(--accent); font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.tex-step-t { font-size: 0.8rem; color: var(--text); line-height: 1.6; }
+.tex-ok { background: rgba(74,222,128,0.07); border: 1px solid rgba(74,222,128,0.2); border-radius: 8px; padding: 9px 12px; margin-top: 9px; font-size: 0.78rem; color: var(--accent2); }
+.tex-warn { background: rgba(251,146,60,0.08); border: 1px solid rgba(251,146,60,0.25); border-radius: 8px; padding: 9px 12px; margin-top: 8px; font-size: 0.78rem; color: var(--warn2); }
+.tex-art { font-family: monospace; font-size: 0.72rem; color: var(--accent2); background: rgba(74,222,128,0.05); border: 1px solid rgba(74,222,128,0.15); border-radius: 7px; padding: 10px; margin: 8px 0; white-space: pre; text-align: center; overflow-x: auto; line-height: 1.5; }
+
+/* Rest day */
+.rest-day { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 28px 20px; text-align: center; margin-bottom: 12px; }
+.rest-day .emoji { font-size: 2.2rem; display: block; margin-bottom: 10px; }
+.rest-day h3 { font-family: 'Fraunces', serif; font-size: 1.1rem; color: #fff; margin-bottom: 6px; }
+.rest-day p { font-size: 0.84rem; color: var(--muted); line-height: 1.6; }
+
+/* Navigation buttons */
+.tr-nav { display: grid; grid-template-columns: 1fr 2fr; gap: 10px; margin-top: 20px; padding-bottom: 20px; }
+.btn-prev { padding: 12px; border-radius: 12px; background: var(--surface2); border: 1px solid var(--border2); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-prev:hover { border-color: var(--accent); color: var(--accent); }
+.btn-next { padding: 12px; border-radius: 12px; background: var(--accent); color: var(--bg); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 7px; }
+.btn-next:hover { background: var(--accent2); transform: translateY(-1px); }
+.btn-next.completed { background: var(--surface3); color: var(--muted); }
+.btn-next.completed:hover { background: var(--surface3); transform: none; }
+
+.day-note-box { background: var(--surface2); border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; padding: 12px 14px; margin-bottom: 14px; font-size: 0.84rem; color: var(--text); line-height: 1.6; }
+
+.phase-chip { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ============================= MAIN PAGE ============================= -->
+<div id="mainPage">
+<div class="hero">
+  <div class="hero-eyebrow">Soléaire Grade 1 · 8 semaines</div>
+  <h1>Programme Reprise Trail</h1>
+  <p>Diagnostic · Plan complet · Exercices détaillés · Suivi de progression</p>
+</div>
+
+<div class="nav-pills">
+  <a href="#diagnostic" class="pill">🔴 Diagnostic</a>
+  <a href="#progression" class="pill active">📈 Progression</a>
+  <a href="#overview" class="pill">🗓️ Programme</a>
+  <a href="#exercices" class="pill">💪 Exercices</a>
+  <a href="#planning" class="pill">📅 Planning</a>
+</div>
+
+<!-- DIAGNOSTIC -->
+<div id="diagnostic"></div>
+<div class="section-label">🔴 Diagnostic — Signal d'alarme</div>
+<div class="card card-danger">
+  <h2>⚠️ Progression trop agressive détectée</h2>
+  <p style="font-size:0.84rem; margin-bottom:10px;">Ton bilan des 4 dernières semaines révèle une progression de volume et de dénivelé trop rapide, expliquant la tendinopathie réactive bilatérale des Achilles.</p>
+  <div class="diag-grid">
+    <div class="mini-stat"><div class="label">Volume S1</div><div class="value">10 km</div></div>
+    <div class="mini-stat"><div class="label">Volume S3</div><div class="value red">25 km</div></div>
+    <div class="mini-stat"><div class="label">Augmentation</div><div class="value red">+150%</div></div>
+    <div class="mini-stat"><div class="label">Règle 10%</div><div class="value red">Violée ×5</div></div>
+  </div>
+  <div class="rule-box"><strong>Règle des 10% :</strong> On n'augmente jamais le volume hebdomadaire de plus de 10% par semaine. Tu as fait +100% en S2, soit 10× trop rapide. Le D+ dès la S1 (sorties avec 200-330m D+) a aggravé la surcharge du soléaire encore en remodelage.</div>
+  <p style="font-size:0.84rem;"><strong>Bonne nouvelle :</strong> La douleur Achille qui disparaît à l'arrêt + raideur matinale = <strong>tendinopathie réactive stade 1-2</strong>. Pas de re-lésion du soléaire. Avec le bon protocole, retour 100% trail en 8 semaines. <span style="color:var(--danger)">⚠️ Consulte ton kiné cette semaine pour valider.</span></p>
+</div>
+
+<div class="card">
+  <h2>📊 Bilan complet</h2>
+  <div class="two-col">
+    <div class="mini-stat" style="text-align:left; padding:12px;">
+      <div class="label" style="margin-bottom:6px;">✅ Points positifs</div>
+      <div style="font-size:0.8rem; color:var(--text); line-height:1.6;">Feu vert kiné · Condition physique quasi normale · Sorties avec D+ déjà réalisées · Surf (proprioception)</div>
+    </div>
+    <div class="mini-stat" style="text-align:left; padding:12px;">
+      <div class="label" style="margin-bottom:6px;">⚠️ Points de vigilance</div>
+      <div style="font-size:0.8rem; color:var(--text); line-height:1.6;">Progression trop rapide · Achille bilatéral irrité · Raideur matinale · Soléaire sous-chargé 4 mois</div>
+    </div>
+  </div>
+</div>
+
+<!-- VUE D'ENSEMBLE -->
+<div id="overview"></div>
+<div class="section-label">🗓️ Vue d'ensemble</div>
+<div class="card card-overview">
+  <h2 style="color:var(--accent)">Programme 8 semaines</h2>
+  <div class="prog-bar-wrap">
+    <div class="prog-bar-label"><span>Sem. 1 (15 km)</span><span>Sem. 8 (40+ km)</span></div>
+    <div class="prog-bar"><div class="prog-bar-fill" style="width:100%"></div></div>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:7px; font-size:0.84rem; margin-top:10px;">
+    <div><span style="color:var(--danger)">🔴</span> <strong>Phase 1 (S1–S2) :</strong> Reset & consolidation Achille — 15→18 km</div>
+    <div><span style="color:var(--warn)">🟠</span> <strong>Phase 2 (S3–S4) :</strong> Reconstruction progressive — 22→26 km</div>
+    <div><span style="color:var(--accent)">🟢</span> <strong>Phase 3 (S5–S6) :</strong> Introduction trail & dénivelé — 28→34 km</div>
+    <div><span style="color:#818cf8)">⚫</span> <strong>Phase 4 (S7–S8) :</strong> Trail pleine intensité — 38→45 km</div>
+  </div>
+</div>
+
+<!-- PROGRESSION -->
+<div id="progression"></div>
+<div class="section-label">📈 Ma progression</div>
+<div class="card card-progress" id="progCard">
+  <h2 style="color:var(--accent)">📈 Ma Progression</h2>
+  <div class="prog-stat-row">
+    <div class="prog-stat"><div class="ps-label">Jour</div><div class="ps-val" id="ps-day">1 / 56</div></div>
+    <div class="prog-stat"><div class="ps-label">Semaine</div><div class="ps-val" id="ps-week">1 / 8</div></div>
+    <div class="prog-stat"><div class="ps-label">Phase</div><div class="ps-val" id="ps-phase">1</div></div>
+    <div class="prog-stat"><div class="ps-label">Complétés</div><div class="ps-val" id="ps-done">0</div></div>
+  </div>
+  <div class="prog-bar-wrap">
+    <div class="prog-bar-label"><span id="pb-label">Début du programme</span><span id="pb-pct">0%</span></div>
+    <div class="prog-bar"><div class="prog-bar-fill" id="pb-fill" style="width:0%"></div></div>
+  </div>
+  <button class="btn-tracker" onclick="openTracker()">
+    <span>Voir ma journée du jour</span>
+    <span>→</span>
+  </button>
+</div>
+
+<!-- PHASES -->
+<div class="phase-title">🔴 Phase 1 — Reset & Consolidation (S1–S2)</div>
+
+<div class="week-card ph1">
+  <div class="week-header"><h3>Semaine 1 — Reset</h3><span class="wkm">15 km · 0 D+</span></div>
+  <div class="week-body">
+    <p style="font-size:0.82rem;color:var(--danger);margin-bottom:10px;">⬇️ Réduction volontaire du volume — indispensable pour calmer l'Achille.</p>
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos actif — étirements soléaire assis 3×30 sec + Knee-to-Wall</span></div>
+      <div class="session"><span class="session-day">M</span><span>Footing 5 km · Allure conversation · <strong>Plat uniquement</strong> · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement : heel drops + montées pointe + mobilité cheville — 15 min</span></div>
+      <div class="session"><span class="session-day">J</span><span>Footing 5 km · Même allure · Surveille sensations Achille · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span>Footing 5 km · Légèrement plus dynamique si aucune douleur · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos total ou surf 🏄</span></div>
+    </div>
+    <div class="sig-box"><strong>🚨 Stop si :</strong> Douleur Achille > 3/10 pendant la séance, ou douleur au réveil le lendemain matin. Repos 1 jour et reprends.</div>
+  </div>
+</div>
+
+<div class="week-card ph1">
+  <div class="week-header"><h3>Semaine 2 — Consolidation</h3><span class="wkm">18 km · 0-50 D+</span></div>
+  <div class="week-body">
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos actif · Étirements doux</span></div>
+      <div class="session"><span class="session-day">M</span><span>Footing 6 km · Légères montées pente &lt; 5% possibles · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement complet (heel drops + Bulgarian + gainage) + mobilité — 20 min</span></div>
+      <div class="session"><span class="session-day">J</span><span>Footing 6 km · Terrain varié léger · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span>Sortie longue 6 km · Terrain plat-léger · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos ou surf 🏄</span></div>
+    </div>
+    <p style="font-size:0.82rem; margin-top:10px;">✅ Si Achille asymptomatique en fin de semaine → passage Phase 2. Sinon → répète S1.</p>
+  </div>
+</div>
+
+<div class="phase-title">🟠 Phase 2 — Reconstruction progressive (S3–S4)</div>
+
+<div class="week-card ph2">
+  <div class="week-header"><h3>Semaine 3 — Montée en charge</h3><span class="wkm">22 km · 100–200 D+</span></div>
+  <div class="week-body">
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos actif</span></div>
+      <div class="session"><span class="session-day">M</span><span>7 km trail facile · <strong>1 côte progressive</strong> · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement excentrique + travail foulée (cadence élevée sur plat)</span></div>
+      <div class="session"><span class="session-day">J</span><span>7 km · Légères accélérations sur 200m ×3 · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span>Sortie longue 8 km trail · 100–150 D+ · Allure endurance · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos</span></div>
+    </div>
+    <div class="tag-list"><span class="tag tg">Première vraie sortie trail</span><span class="tag tb">Salomon Genesis recommandées</span></div>
+  </div>
+</div>
+
+<div class="week-card ph2">
+  <div class="week-header"><h3>Semaine 4 — Consolidation charge</h3><span class="wkm">26 km · 200–350 D+</span></div>
+  <div class="week-body">
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">M</span><span>8 km trail, quelques côtes · Allure naturelle · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement + technique montée/descente 20 min</span></div>
+      <div class="session"><span class="session-day">J</span><span>8 km · <strong>2×5 min allure trail racing</strong> · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span>Sortie longue 10 km trail · 250–350 D+ · Allure endurance · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos ou rando légère</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase-title">🟢 Phase 3 — Trail & dénivelé (S5–S6)</div>
+
+<div class="week-card ph3">
+  <div class="week-header"><h3>Semaine 5 — Terrain technique</h3><span class="wkm">30 km · 400–600 D+</span></div>
+  <div class="week-body">
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">M</span><span>9 km trail varié · Allure naturelle · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement + calisthenics membres inférieurs 20 min</span></div>
+      <div class="session"><span class="session-day">J</span><span>9 km · <strong>4×3 min côte</strong>, récup descente jogging · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span>Sortie longue 12 km trail · 400–500 D+ · Trail feeling 🏔️ · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos ou surf 🏄</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="week-card ph3">
+  <div class="week-header"><h3>Semaine 6 — Introduction qualité</h3><span class="wkm">34 km · 600–900 D+</span></div>
+  <div class="week-body">
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">M</span><span>10 km trail · Finales progressives (accélération 2 derniers km) · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement spécifique soléaire + gainage</span></div>
+      <div class="session"><span class="session-day">J</span><span>10 km · <strong>5×4 min à 75–80% FC max</strong>, récup 2 min marche · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span>Sortie longue 14 km trail · 600–900 D+ · Allure endurance · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="phase-title">⚫ Phase 4 — Trail pleine intensité (S7–S8)</div>
+
+<div class="week-card ph4">
+  <div class="week-header"><h3>Semaine 7 — Volume & intensité</h3><span class="wkm">38 km · 900–1200 D+</span></div>
+  <div class="week-body">
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">M</span><span>11 km trail technique · Attaquer les descentes · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement maintenance 20 min</span></div>
+      <div class="session"><span class="session-day">J</span><span>12 km · <strong>8×45 sec VMA côte</strong>, descente récup · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span>Sortie longue 15 km trail · 900–1100 D+ · Simulation conditions course · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos ou sortie reco très facile 30 min</span></div>
+    </div>
+    <div class="tag-list"><span class="tag tb">Tester ravitaillement</span><span class="tag tb">Tester trail pack</span></div>
+  </div>
+</div>
+
+<div class="week-card ph4">
+  <div class="week-header"><h3>Semaine 8 — Full trail 🔥</h3><span class="wkm">40–45 km · 1200+ D+</span></div>
+  <div class="week-body">
+    <div class="sessions">
+      <div class="session"><span class="session-day">L</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">M</span><span>12 km trail · Allure libre · Plaisir total · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">Me</span><span>Renforcement + gainage 20 min</span></div>
+      <div class="session"><span class="session-day">J</span><span>12 km · Rythme trail racing 10 km + 2 km retour · Heel drops le soir</span></div>
+      <div class="session"><span class="session-day">V</span><span>Repos</span></div>
+      <div class="session"><span class="session-day">S</span><span><strong>Grande sortie 18–20 km trail · 1200–1500 D+</strong> · Tu es de retour 🏔️</span></div>
+      <div class="session"><span class="session-day">D</span><span>Repos actif 🎉</span></div>
+    </div>
+    <div class="tag-list"><span class="tag tg">100% capacité trail</span><span class="tag tg">Prêt pour la Sicile</span></div>
+  </div>
+</div>
+
+<div class="card card-warn">
+  <h2>📏 Les 5 règles d'or</h2>
+  <ul>
+    <li><strong>Règle des 10% :</strong> Jamais +10% de volume d'une semaine à l'autre</li>
+    <li><strong>Règle des 2/10 :</strong> Si douleur > 2/10 pendant l'effort → stop immédiat</li>
+    <li><strong>Test du matin :</strong> Douleur Achille au lever → repos ce jour-là</li>
+    <li><strong>Règle 80/20 :</strong> 80% des séances en endurance fondamentale, 20% qualité</li>
+    <li><strong>Sommeil :</strong> Ton 22h–7h est un atout énorme — ne le sacrifie pas</li>
+  </ul>
+</div>
+
+<!-- EXERCISES SECTION -->
+<div id="exercices"></div>
+<div class="section-label">💪 Exercices détaillés — Maison</div>
+<p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;line-height:1.6;">Clique sur chaque exercice pour les instructions complètes. Les exercices 1 & 2 sont à faire <strong style="color:var(--text)">tous les jours</strong>.</p>
+
+<!-- EX 1 -->
+<div class="ex-card open" id="ex1">
+  <div class="ex-header" onclick="toggleEx(this)">
+    <div class="ex-number en-g">1</div>
+    <div class="ex-meta">
+      <div class="ex-name">Heel Drop Excentrique — Soléaire</div>
+      <div class="ex-sub">L'exercice n°1 pour ton Achille · Quotidien</div>
+      <div class="tag-list"><span class="tag tg">Quotidien</span><span class="tag to">Priorité absolue</span><span class="tag tb">Marche / Step</span></div>
+    </div>
+    <div class="expand-btn">+</div>
+  </div>
+  <div class="ex-body">
+    <div class="visual-box">
+      <div class="v-title">Position de départ</div>
+      <div class="position-art">    O  ← tête droite
+    |
+   /|\
+    |
+   / \ ← genou FLÉCHI à 45°
+  /   \
+avant-pied sur bord de marche
+talon dans le vide</div>
+      <p style="margin-top:8px;color:var(--muted);">Besoin : une marche d'escalier, un step de gym, ou un gros livre épais.</p>
+    </div>
+    <div class="visual-box">
+      <div class="v-title">Exécution — 4 temps</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Position :</strong> Avant-pied sur le bord de la marche, talon dans le vide. <strong>Genou plié à 45°</strong> — c'est ça qui cible le soléaire.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Monte :</strong> Pousse sur la pointe des <strong>deux pieds</strong> jusqu'en position haute.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Bascule :</strong> Enlève le pied non-sollicité. Équilibre sur un seul pied.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Descends lentement :</strong> Laisse le talon descendre <strong>sous le niveau de la marche</strong> en comptant 3 sec. Contrôle total.</div></div>
+      </div>
+    </div>
+    <div class="dosage">
+      <div class="dose-item"><div class="d-label">Séries</div><div class="d-val">3</div></div>
+      <div class="dose-item"><div class="d-label">Répétitions</div><div class="d-val">15/jambe</div></div>
+      <div class="dose-item"><div class="d-label">Repos</div><div class="d-val">90 sec</div></div>
+    </div>
+    <div class="ok-box"><strong>✅ Normal :</strong> Légère brûlure dans le bas du mollet en descente — c'est voulu.</div>
+    <div class="warn-box"><strong>⚠️ Stop si :</strong> Douleur vive > 4/10 ou persistante > 30 min après. Passe en bilatéral (deux pieds) dans ce cas.</div>
+  </div>
+</div>
+
+<!-- EX 2 -->
+<div class="ex-card" id="ex2">
+  <div class="ex-header" onclick="toggleEx(this)">
+    <div class="ex-number en-g">2</div>
+    <div class="ex-meta">
+      <div class="ex-name">Heel Drop Excentrique — Gastrocnémien</div>
+      <div class="ex-sub">Complète le travail du soléaire — jambe tendue · Quotidien</div>
+      <div class="tag-list"><span class="tag tg">Quotidien</span><span class="tag tb">Après ex.1</span></div>
+    </div>
+    <div class="expand-btn">+</div>
+  </div>
+  <div class="ex-body">
+    <div class="visual-box">
+      <div class="v-title">La seule différence avec l'ex.1</div>
+      <div class="position-art">    O
+    |
+   /|\
+    |
+    | ← jambe TENDUE (genou à 0°)
+    |
+avant-pied sur bord marche</div>
+    </div>
+    <div class="visual-box">
+      <div class="v-title">Exécution</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Même setup</strong> que ex.1 mais jambe <strong>complètement tendue</strong>, genou verrouillé pendant tout l'exercice.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Monte sur les <strong>deux pieds</strong>, bascule sur un seul, descends en <strong>3 secondes</strong>.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Toujours faire <strong>après</strong> l'ex.1 — jamais avant.</div></div>
+      </div>
+    </div>
+    <div class="dosage">
+      <div class="dose-item"><div class="d-label">Séries</div><div class="d-val">3</div></div>
+      <div class="dose-item"><div class="d-label">Répétitions</div><div class="d-val">15/jambe</div></div>
+      <div class="dose-item"><div class="d-label">Repos</div><div class="d-val">90 sec</div></div>
+    </div>
+    <div class="warn-box"><strong>⚠️ Ordre :</strong> Toujours soléaire (ex.1) avant gastrocnémien (ex.2).</div>
+  </div>
+</div>
+
+<!-- EX 3 -->
+<div class="ex-card" id="ex3">
+  <div class="ex-header" onclick="toggleEx(this)">
+    <div class="ex-number en-o">3</div>
+    <div class="ex-meta">
+      <div class="ex-name">Montée sur Demi-Pointe Unipodale</div>
+      <div class="ex-sub">Proprioception & force fonctionnelle · 3×/semaine</div>
+      <div class="tag-list"><span class="tag tg">3×/semaine</span><span class="tag tb">Sol plat</span></div>
+    </div>
+    <div class="expand-btn">+</div>
+  </div>
+  <div class="ex-body">
+    <div class="visual-box">
+      <div class="v-title">Pourquoi ?</div>
+      <p>Après 4 mois d'immobilité, ta cheville a perdu une partie de sa <strong>proprioception</strong>. Essentiel pour les descentes techniques en trail.</p>
+    </div>
+    <div class="visual-box">
+      <div class="v-title">Exécution</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Debout sur un pied, main légèrement posée sur le mur pour sécurité.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Monte lentement sur la pointe en <strong>2 secondes</strong>. Va le plus haut possible.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Tiens 1 seconde</strong> en haut — proprioception active.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text">Redescends en <strong>4 secondes</strong>. Contrôle total, pas de vacillement.</div></div>
+      </div>
+    </div>
+    <div class="dosage">
+      <div class="dose-item"><div class="d-label">Séries</div><div class="d-val">3</div></div>
+      <div class="dose-item"><div class="d-label">Rép./jambe</div><div class="d-val">12</div></div>
+      <div class="dose-item"><div class="d-label">Repos</div><div class="d-val">60 sec</div></div>
+    </div>
+    <div class="ok-box"><strong>✅ Progression :</strong> S1-S2 → appui mur · S3-S4 → sans appui · S5+ → yeux fermés</div>
+  </div>
+</div>
+
+<!-- EX 4 -->
+<div class="ex-card" id="ex4">
+  <div class="ex-header" onclick="toggleEx(this)">
+    <div class="ex-number en-o">4</div>
+    <div class="ex-meta">
+      <div class="ex-name">Bulgarian Split Squat</div>
+      <div class="ex-sub">Quadriceps, fessiers, stabilité du genou · 3×/semaine</div>
+      <div class="tag-list"><span class="tag tg">3×/semaine</span><span class="tag tb">Chaise / canapé</span></div>
+    </div>
+    <div class="expand-btn">+</div>
+  </div>
+  <div class="ex-body">
+    <div class="visual-box">
+      <div class="v-title">Setup</div>
+      <div class="position-art">   [CHAISE / CANAPÉ]
+        ↑
+   pied arrière dessus
+   (cou-de-pied posé)
+
+   pied avant : 60-70 cm devant
+   genou avant ne dépasse pas le pied</div>
+    </div>
+    <div class="visual-box">
+      <div class="v-title">Exécution</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Pied arrière sur chaise (le dessus du pied), pied avant suffisamment loin — teste en descendant.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Descends en <strong>2 secondes</strong> jusqu'à ce que le genou arrière frôle le sol.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Remonte en poussant sur le <strong>talon avant</strong>. Buste droit, regard devant.</div></div>
+      </div>
+    </div>
+    <div class="dosage">
+      <div class="dose-item"><div class="d-label">Séries</div><div class="d-val">3</div></div>
+      <div class="dose-item"><div class="d-label">Rép./jambe</div><div class="d-val">10</div></div>
+      <div class="dose-item"><div class="d-label">Repos</div><div class="d-val">90 sec</div></div>
+    </div>
+    <div class="warn-box"><strong>⚠️ Valgus :</strong> Si le genou s'effondre vers l'intérieur → réduire les reps et pousser le genou vers l'extérieur.</div>
+  </div>
+</div>
+
+<!-- EX 5 -->
+<div class="ex-card" id="ex5">
+  <div class="ex-header" onclick="toggleEx(this)">
+    <div class="ex-number en-o">5</div>
+    <div class="ex-meta">
+      <div class="ex-name">Gainage Latéral + Abduction</div>
+      <div class="ex-sub">Stabilité du bassin — prévention des déséquilibres · 3×/semaine</div>
+      <div class="tag-list"><span class="tag tg">3×/semaine</span><span class="tag tb">Sol</span></div>
+    </div>
+    <div class="expand-btn">+</div>
+  </div>
+  <div class="ex-body">
+    <div class="visual-box">
+      <div class="v-title">Exécution</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Allongé sur le côté, appui avant-bras, coude sous l'épaule. Corps aligné <strong>tête-pieds</strong>.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Soulève le bassin pour former une <strong>ligne droite</strong>. Ne pas laisser le bassin s'affaisser.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Maintiens <strong>30 secondes</strong> en respirant normalement.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Version avancée :</strong> En position de gainage, lève la jambe du dessus à 30-40 cm et redescends — 10 reps.</div></div>
+      </div>
+    </div>
+    <div class="dosage">
+      <div class="dose-item"><div class="d-label">Séries</div><div class="d-val">3</div></div>
+      <div class="dose-item"><div class="d-label">Durée</div><div class="d-val">30 sec</div></div>
+      <div class="dose-item"><div class="d-label">Chaque côté</div><div class="d-val">×2</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 6 -->
+<div class="ex-card" id="ex6">
+  <div class="ex-header" onclick="toggleEx(this)">
+    <div class="ex-number en-b">6</div>
+    <div class="ex-meta">
+      <div class="ex-name">Étirement Soléaire Assis</div>
+      <div class="ex-sub">Souplesse du soléaire — doux uniquement · Quotidien</div>
+      <div class="tag-list"><span class="tag tg">Quotidien</span><span class="tag tr">Doux uniquement</span></div>
+    </div>
+    <div class="expand-btn">+</div>
+  </div>
+  <div class="ex-body">
+    <div class="warn-box" style="margin-top:12px;"><strong>⚠️ Règle cruciale :</strong> En phase de tendinopathie réactive, les étirements agressifs aggravent l'Achille. Sensation d'allongement confortable uniquement — jamais de douleur.</div>
+    <div class="visual-box" style="margin-top:10px;">
+      <div class="v-title">Exécution</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Assis au sol, jambe <strong>légèrement fléchie</strong>. Serviette autour de la plante du pied.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Tire doucement vers toi. Arrête à la <strong>première sensation d'allongement</strong>.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Maintiens <strong>30 secondes</strong>, respire normalement. Relâche 10 sec, recommence.</div></div>
+      </div>
+    </div>
+    <div class="dosage">
+      <div class="dose-item"><div class="d-label">Répétitions</div><div class="d-val">3</div></div>
+      <div class="dose-item"><div class="d-label">Durée</div><div class="d-val">30 sec</div></div>
+      <div class="dose-item"><div class="d-label">Chaque jambe</div><div class="d-val">×2</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- EX 7 -->
+<div class="ex-card" id="ex7">
+  <div class="ex-header" onclick="toggleEx(this)">
+    <div class="ex-number en-b">7</div>
+    <div class="ex-meta">
+      <div class="ex-name">Knee-to-Wall — Mobilité Cheville</div>
+      <div class="ex-sub">Flexion dorsale — déterminante pour les descentes trail · Quotidien</div>
+      <div class="tag-list"><span class="tag tg">Quotidien</span><span class="tag tb">Mur</span></div>
+    </div>
+    <div class="expand-btn">+</div>
+  </div>
+  <div class="ex-body">
+    <div class="visual-box">
+      <div class="v-title">Exécution</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Debout face au mur à <strong>10-15 cm</strong>. Pied à plat, orteils vers le mur.</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">Fais glisser le genou vers le mur en gardant le <strong>talon au sol</strong>.</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text">Si genou touche facilement → recule le pied de 1-2 cm. Trouve ta <strong>distance maximale</strong> talon au sol.</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text"><strong>10 répétitions lentes</strong> à cette distance.</div></div>
+      </div>
+    </div>
+    <div class="dosage">
+      <div class="dose-item"><div class="d-label">Séries</div><div class="d-val">3</div></div>
+      <div class="dose-item"><div class="d-label">Répétitions</div><div class="d-val">10</div></div>
+      <div class="dose-item"><div class="d-label">Chaque jambe</div><div class="d-val">×2</div></div>
+    </div>
+    <div class="ok-box"><strong>✅ Test progrès :</strong> Mesure ta distance pied-mur au départ — elle doit augmenter chaque semaine.</div>
+  </div>
+</div>
+
+<!-- PLANNING -->
+<div id="planning"></div>
+<div class="section-label">📅 Planning hebdomadaire — clique sur un jour</div>
+<div class="planning-card">
+  <div class="day-row" onclick="toggleDay('lun')" id="row-lun"><div class="day-label">Lun</div><div class="day-exs">Heel drops (ex.1+2) · Étirement soléaire · Knee-to-wall</div><div class="day-time">15 min</div><div class="day-chev">▼</div></div>
+  <div class="day-detail" id="detail-lun">
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">1</div><div class="mini-ex-name">Heel Drop Soléaire (ex.1)</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">15 reps/jambe</div><div class="mini-dose-item">Genou 45°</div></div><div class="mini-steps"><div class="mini-step">Avant-pied marche · talon vide · genou fléchi 45°</div><div class="mini-step">Monte 2 pieds → bascule 1 → <strong>descends 3 sec</strong></div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">2</div><div class="mini-ex-name">Heel Drop Gastrocnémien (ex.2)</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">15 reps/jambe</div><div class="mini-dose-item">Jambe tendue</div></div><div class="mini-steps"><div class="mini-step">Identique ex.1 mais <strong>jambe complètement tendue</strong> · Toujours après ex.1</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-b">6</div><div class="mini-ex-name">Étirement Soléaire Assis (ex.6)</div></div><div class="mini-dose"><div class="mini-dose-item">3×30 sec</div><div class="mini-dose-item">Chaque jambe</div><div class="mini-dose-item">Très doux</div></div><div class="mini-steps"><div class="mini-step">Serviette · genou légèrement fléchi · tire doucement 30 sec · jamais douloureux</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-b">7</div><div class="mini-ex-name">Knee-to-Wall Mobilité (ex.7)</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">10 reps/jambe</div></div><div class="mini-steps"><div class="mini-step">Face au mur 10-15 cm · genou vers mur talon au sol · 10 reps lentes</div></div></div>
+  </div>
+
+  <div class="day-row" onclick="toggleDay('mar')" id="row-mar"><div class="day-label">Mar</div><div class="day-exs">Course + heel drops après · Mobilité cheville</div><div class="day-time">10 min</div><div class="day-chev">▼</div></div>
+  <div class="day-detail" id="detail-mar">
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">🏃</div><div class="mini-ex-name">Sortie course (voir programme semaine en cours)</div></div><div class="mini-steps"><div class="mini-step">Allure conversation · Surveille les Achilles · Stop si douleur > 2/10</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">1</div><div class="mini-ex-name">Heel Drop Soléaire — après la course</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">15 reps/jambe</div></div><div class="mini-steps"><div class="mini-step">Dans l'heure après la sortie · descente lente 3 sec</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-b">7</div><div class="mini-ex-name">Knee-to-Wall — après la course</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">10 reps/jambe</div></div><div class="mini-steps"><div class="mini-step">Idéal quand les tissus sont encore chauds — meilleure progression</div></div></div>
+  </div>
+
+  <div class="day-row" onclick="toggleDay('mer')" id="row-mer"><div class="day-label">Mer</div><div class="day-exs">Heel drops · Bulgarian · Gainage · Montée pointe</div><div class="day-time">25 min</div><div class="day-chev">▼</div></div>
+  <div class="day-detail" id="detail-mer">
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">1</div><div class="mini-ex-name">Heel Drop Soléaire + Gastrocnémien (ex.1+2)</div></div><div class="mini-dose"><div class="mini-dose-item">3×15 chacun</div><div class="mini-dose-item">Soléaire d'abord</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-o">4</div><div class="mini-ex-name">Bulgarian Split Squat (ex.4)</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">10 reps/jambe</div><div class="mini-dose-item">90 sec repos</div></div><div class="mini-steps"><div class="mini-step">Pied arrière chaise · pied avant 60-70cm · descends 2 sec · pousse sur talon avant</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-o">5</div><div class="mini-ex-name">Gainage Latéral + Abduction (ex.5)</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">30 sec</div><div class="mini-dose-item">Chaque côté</div></div><div class="mini-steps"><div class="mini-step">Sur le côté avant-bras · bassin soulevé ligne droite · version avancée : lève jambe 10× pendant gainage</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-o">3</div><div class="mini-ex-name">Montée Demi-Pointe Unipodale (ex.3)</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">12 reps/jambe</div><div class="mini-dose-item">4 sec descente</div></div><div class="mini-steps"><div class="mini-step">Sur un pied · monte 2 sec · tiens 1 sec · <strong>descends 4 sec</strong> · S1-S2 : appui mur</div></div></div>
+  </div>
+
+  <div class="day-row" onclick="toggleDay('jeu')" id="row-jeu"><div class="day-label">Jeu</div><div class="day-exs">Course + heel drops après · Étirement soléaire</div><div class="day-time">10 min</div><div class="day-chev">▼</div></div>
+  <div class="day-detail" id="detail-jeu">
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">🏃</div><div class="mini-ex-name">Sortie course (voir programme semaine en cours)</div></div><div class="mini-steps"><div class="mini-step">Selon le programme de ta semaine · surveille l'Achille</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">1</div><div class="mini-ex-name">Heel Drop Soléaire — après la course</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">15 reps/jambe</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-b">6</div><div class="mini-ex-name">Étirement Soléaire Assis (ex.6)</div></div><div class="mini-dose"><div class="mini-dose-item">3×30 sec</div><div class="mini-dose-item">Chaque jambe</div></div><div class="mini-steps"><div class="mini-step">Après la course · tissus chauds · étirement doux uniquement</div></div></div>
+  </div>
+
+  <div class="day-row" onclick="toggleDay('ven')" id="row-ven"><div class="day-label">Ven</div><div class="day-exs">Repos — étirements doux si besoin</div><div class="day-time">5 min</div><div class="day-chev">▼</div></div>
+  <div class="day-detail" id="detail-ven"><div class="rest-note"><span class="re">😴</span>Journée de récupération. Le repos fait partie de l'entraînement — c'est pendant ces phases que les tendons se renforcent.<br><br>Si tu ressens le besoin de bouger : <strong>ex.6 étirement soléaire</strong> très léger, 2×30 sec uniquement.</div></div>
+
+  <div class="day-row" onclick="toggleDay('sam')" id="row-sam"><div class="day-label">Sam</div><div class="day-exs">Sortie longue + heel drops · Knee-to-wall</div><div class="day-time">10 min</div><div class="day-chev">▼</div></div>
+  <div class="day-detail" id="detail-sam">
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">🏔️</div><div class="mini-ex-name">Sortie longue (voir programme semaine en cours)</div></div><div class="mini-steps"><div class="mini-step">La séance clé de la semaine · hydratation + ravitaillement · allure endurance</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-g">1</div><div class="mini-ex-name">Heel Drop Soléaire — après sortie longue</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">15 reps/jambe</div><div class="mini-dose-item">Important ce jour</div></div><div class="mini-steps"><div class="mini-step">Particulièrement important après la longue · si très fatigué : passe en bilatéral</div></div></div>
+    <div class="mini-ex"><div class="mini-ex-hdr"><div class="mini-num mn-b">7</div><div class="mini-ex-name">Knee-to-Wall (ex.7)</div></div><div class="mini-dose"><div class="mini-dose-item">3 séries</div><div class="mini-dose-item">10 reps/jambe</div></div><div class="mini-steps"><div class="mini-step">Note si ta distance pied-mur a progressé depuis la semaine dernière</div></div></div>
+  </div>
+
+  <div class="day-row" onclick="toggleDay('dim')" id="row-dim" style="border-bottom:none;"><div class="day-label">Dim</div><div class="day-exs">Repos total · Surf si vagues 🏄</div><div class="day-time">—</div><div class="day-chev">▼</div></div>
+  <div class="day-detail" id="detail-dim"><div class="rest-note"><span class="re">🏄</span>Repos complet. Zéro exercice.<br><br>Le surf est parfait ce jour — travail proprioceptif naturel de la cheville, gainage actif, sans charge verticale sur l'Achille. Profite-en sans culpabilité.</div></div>
+</div>
+
+<div class="footer-note">
+  Les heel drops excentriques sont à faire <strong>chaque jour</strong>, y compris les jours de course — idéalement le soir.<br>
+  Ce programme est un complément à ton suivi kiné · Reprends contact avec lui cette semaine pour valider la progression.
+</div>
+</div><!-- end mainPage -->
+
+
+<!-- ============================= TRACKER PAGE ============================= -->
+<div id="trackerPage">
+  <div class="tr-header">
+    <button class="tr-back" onclick="closeTracker()">←</button>
+    <div class="tr-title-wrap">
+      <div class="tr-eyebrow" id="tr-eyebrow">Phase 1 · Semaine 1</div>
+      <div class="tr-title" id="tr-title">Jour 1 — Repos actif &amp; Mobilité</div>
+    </div>
+    <div class="tr-day-badge" id="tr-badge">J1/56</div>
+  </div>
+
+  <div class="tr-body">
+    <!-- CHARTS -->
+    <div class="charts-grid">
+      <div class="chart-card" style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div class="chart-title" style="text-align:center;">Progression</div>
+        <div class="circ-wrap" id="circProgress">
+          <div class="circ-center">
+            <div class="circ-num" id="circNum">0%</div>
+            <div class="circ-sub">Terminé</div>
+          </div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Semaines — km</div>
+        <div class="week-bars" id="weekBars"></div>
+      </div>
+    </div>
+
+    <!-- QUOTE + FUNFACT -->
+    <div class="qf-card">
+      <div class="quote-text" id="dayQuote">"La douleur d'aujourd'hui est la force de demain."</div>
+      <div class="funfact-wrap">
+        <div class="funfact-label">🏔️ Fun fact trail</div>
+        <div class="funfact-text" id="dayFunfact">Le soléaire peut absorber jusqu'à 8× le poids du corps à chaque foulée en montée.</div>
+      </div>
+    </div>
+
+    <!-- DAY NOTE -->
+    <div class="day-note-box" id="dayNote"></div>
+
+    <!-- DAY CONTENT -->
+    <div id="dayContent"></div>
+
+    <!-- NAVIGATION -->
+    <div class="tr-nav">
+      <button class="btn-prev" onclick="prevDay()" id="btnPrev">← Jour précédent</button>
+      <button class="btn-next" onclick="nextDay()" id="btnNext">Jour suivant →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===================== DATA =====================
+const quotes = [
+  "La douleur d'aujourd'hui est la force de demain. Chaque heel drop te rapproche de tes montagnes.",
+  "Un kilomètre récupéré intelligemment vaut mieux que dix forcés.",
+  "Les champions se construisent dans les séances que personne ne voit — comme celle-ci.",
+  "La patience est le muscle le plus difficile à entraîner. Tu es en train de le muscler.",
+  "Le trail enseigne une chose : il n'y a pas de raccourci, seulement le chemin.",
+  "Ton Achille se renforce pendant que tu travailles. Chaque répétition est un investissement silencieux.",
+  "La Sicile t'attend. Chaque série d'aujourd'hui est un pas vers ces sentiers.",
+  "Guérir, c'est du trail. Il y a des montées, des descentes, des plateaux. Tu es sur le bon sentier.",
+  "Les meilleurs trail runners savent que la récupération n'est pas du repos — c'est de l'entraînement.",
+  "Ta progression n'est pas linéaire, mais elle est réelle. Les tendons ne mentent pas.",
+  "Chaque jour complété est une victoire. La régularité bat toujours l'intensité.",
+  "Le soléaire se souvient de chaque heel drop. Il se prépare en silence.",
+  "Les grands trails commencent par de petites séances de renforcement comme celle-ci.",
+  "Confiance dans le processus. Les 8 semaines sont là pour une raison.",
+  "La route vers la Sicile passe par aujourd'hui. Fais-le bien.",
+  "Ton corps est plus fort que tu ne le penses. Ton tendon aussi.",
+  "Ce n'est pas de la fatigue que tu ressens — c'est de la construction.",
+  "Chaque descent lente de talon est un message envoyé au tendon : tu peux de nouveau faire confiance.",
+  "Le trail commence dans la tête. Et la tête commence par honorer les séances de récup.",
+  "Dans 8 semaines, tu regarderas ce programme en sachant que chaque journée en valait la peine."
+];
+
+const funfacts = [
+  "Le soléaire peut absorber jusqu'à 8× le poids du corps à chaque foulée en montée.",
+  "Le trail running est l'une des disciplines sportives à la plus forte croissance en France, avec +15% de licenciés par an.",
+  "Le record du 100 miles (160 km) en trail est de 11h19 — soit environ 8 min/km sur terrain montagneux.",
+  "Une sortie trail sollicite 40% plus de groupes musculaires qu'une course sur route à allure équivalente.",
+  "La descente en trail génère une force d'impact jusqu'à 3× supérieure à la montée.",
+  "Le tendon d'Achille est le plus résistant du corps humain — il peut supporter jusqu'à 900 kg de tension.",
+  "Les coureurs de trail ont en moyenne 30% moins de blessures aux genoux que les marathoniens sur route.",
+  "L'UTMB (171 km) reçoit plus de 10 000 dossiers de candidature pour 2 300 places.",
+  "Kilian Jornet a couru jusqu'au sommet de l'Everest (8849m) et retour en moins de 38 heures sans oxygène.",
+  "La course en nature réduit de 20% l'activité dans la zone du cerveau liée aux pensées négatives.",
+  "En trail, la marche rapide est souvent plus économique que la course à partir de 15-20% de pente.",
+  "Le mollet (soléaire + gastrocnémien) représente 40% de la puissance propulsive en course à pied.",
+  "Les ultra-trailers élites consomment jusqu'à 10 000 calories par jour lors d'un 100 miles.",
+  "Les bâtons de trail peuvent réduire de 25% la charge sur les quadriceps en descente.",
+  "Le heel drop excentrique a été validé en 1984 par le Dr Alfredson comme traitement des tendinopathies — après qu'il se soit soigné lui-même !",
+  "La proprioception de la cheville se dégrade en seulement 2 semaines d'immobilisation — et se récupère en 6 semaines d'entraînement spécifique.",
+  "Les trail runners ont en général une foulée plus courte et une cadence plus haute que les coureurs sur route — ce qui réduit le stress sur les tendons.",
+  "La Sicile compte plus de 500 km de sentiers officiels de trail, avec des vues sur l'Etna et la Méditerranée.",
+  "Le Garmin Forerunner 165 peut détecter la cadence de foulée, le facteur de charge verticale et le temps de contact au sol — tous liés à la santé du mollet.",
+  "En trail, 80% des blessures surviennent dans les 4 premières semaines de reprise après une longue interruption — c'est exactement là où tu en es."
+];
+
+const exLib = {
+  hds: { num:1, nc:'en-g', name:'Heel Drop Excentrique — Soléaire', sub:'Quotidien · Genou fléchi 45°',
+    dosage:[{l:'Séries',v:'3'},{l:'Rép./jambe',v:'15'},{l:'Repos',v:'90 sec'}],
+    art:`avant-pied sur bord de marche\ntalon dans le vide\ngenou FLÉCHI à 45°`,
+    steps:[
+      {t:'Position',s:'Avant-pied sur bord de marche, talon dans le vide. <strong>Genou fléchi à 45°</strong> — cible le soléaire spécifiquement.'},
+      {t:'Monte',s:'Pousse sur la pointe des <strong>deux pieds</strong> jusqu\'en position haute.'},
+      {t:'Bascule',s:'Enlève le pied non-sollicité. Équilibre sur un seul pied.'},
+      {t:'Descends lentement',s:'Laisse le talon descendre <strong>sous le niveau de la marche</strong> en comptant <strong>3 secondes</strong>. Contrôle la descente.'}
+    ],
+    ok:'Légère brûlure dans le bas du mollet en descente = normal ✅',
+    warn:'Douleur vive > 4/10 ou persistante 30 min après → stop, passe en bilatéral (deux pieds)'
+  },
+  hdg: { num:2, nc:'en-g', name:'Heel Drop Excentrique — Gastrocnémien', sub:'Quotidien · Jambe tendue — toujours après ex.1',
+    dosage:[{l:'Séries',v:'3'},{l:'Rép./jambe',v:'15'},{l:'Repos',v:'90 sec'}],
+    art:`avant-pied sur bord de marche\ntalon dans le vide\njambe TENDUE (genou à 0°)`,
+    steps:[
+      {t:'Position',s:'Même setup que ex.1 mais <strong>jambe complètement tendue</strong>, genou verrouillé tout au long.'},
+      {t:'Monte + bascule',s:'Monte à deux pieds → enlève un pied → descends en <strong>3 secondes</strong>.'},
+      {t:'Ordre',s:'<strong>Toujours après</strong> l\'ex.1 soléaire — jamais en premier.'}
+    ],
+    warn:'Ne jamais commencer par cet exercice — soléaire d\'abord'
+  },
+  cpu: { num:3, nc:'en-o', name:'Montée sur Demi-Pointe Unipodale', sub:'3×/semaine · Proprioception cheville',
+    dosage:[{l:'Séries',v:'3'},{l:'Rép./jambe',v:'12'},{l:'Repos',v:'60 sec'}],
+    steps:[
+      {t:'Position',s:'Debout sur un pied, main légèrement sur le mur pour sécurité.'},
+      {t:'Monte',s:'Monte lentement en <strong>2 secondes</strong>. Va le plus haut possible.'},
+      {t:'Tiens',s:'<strong>1 seconde</strong> en position haute.'},
+      {t:'Descends',s:'Redescends en <strong>4 secondes</strong>. Contrôle total, pas de vacillement.'}
+    ],
+    ok:'Progression : S1-S2 appui mur → S3-S4 sans appui → S5+ yeux fermés'
+  },
+  bss: { num:4, nc:'en-o', name:'Bulgarian Split Squat', sub:'3×/semaine · Quadriceps & fessiers',
+    dosage:[{l:'Séries',v:'3'},{l:'Rép./jambe',v:'10'},{l:'Repos',v:'90 sec'}],
+    steps:[
+      {t:'Setup',s:'Pied arrière sur chaise (cou-de-pied posé), pied avant à <strong>60-70 cm</strong> devant.'},
+      {t:'Descends',s:'En <strong>2 secondes</strong> jusqu\'à ce que le genou arrière frôle le sol. Genou avant ne dépasse pas les orteils.'},
+      {t:'Remonte',s:'Pousse sur le <strong>talon avant</strong>. Buste droit, regard devant.'}
+    ],
+    warn:'Genou qui s\'effondre vers l\'intérieur (valgus) → réduire les reps et pousser le genou vers l\'extérieur'
+  },
+  gla: { num:5, nc:'en-o', name:'Gainage Latéral + Abduction', sub:'3×/semaine · Stabilité du bassin',
+    dosage:[{l:'Séries',v:'3'},{l:'Durée',v:'30 sec'},{l:'Chaque côté',v:'×2'}],
+    steps:[
+      {t:'Position',s:'Allongé sur le côté, appui avant-bras, coude sous l\'épaule. Corps aligné <strong>tête-pieds</strong>.'},
+      {t:'Soulève',s:'Soulève le bassin pour former une ligne droite. Ne laisse pas le bassin s\'affaisser.'},
+      {t:'Maintiens',s:'<strong>30 secondes</strong> en respirant normalement.'},
+      {t:'Version avancée',s:'En position de gainage, lève la jambe du dessus à 30-40 cm et redescends — <strong>10 reps</strong>.'}
+    ]
+  },
+  ets: { num:6, nc:'en-b', name:'Étirement Soléaire Assis', sub:'Quotidien · Doux uniquement',
+    dosage:[{l:'Répétitions',v:'3'},{l:'Durée',v:'30 sec'},{l:'Chaque jambe',v:'×2'}],
+    steps:[
+      {t:'Position',s:'Assis au sol, jambe <strong>légèrement fléchie</strong>. Serviette autour de la plante du pied.'},
+      {t:'Tire',s:'Ramène doucement le pied vers toi. <strong>Arrête à la première sensation d\'allongement</strong>.'},
+      {t:'Maintiens',s:'<strong>30 secondes</strong>, respire normalement. Relâche 10 sec, recommence.'}
+    ],
+    warn:'En phase d\'Achille irrité : étirements DOUX uniquement. Pas d\'étirements agressifs — ils aggravent la tendinopathie.'
+  },
+  ktw: { num:7, nc:'en-b', name:'Knee-to-Wall — Mobilité Cheville', sub:'Quotidien · Flexion dorsale',
+    dosage:[{l:'Séries',v:'3'},{l:'Répétitions',v:'10'},{l:'Chaque jambe',v:'×2'}],
+    steps:[
+      {t:'Position',s:'Debout face au mur à <strong>10-15 cm</strong>. Pied à plat, orteils vers le mur.'},
+      {t:'Genou vers mur',s:'Fais glisser le genou vers le mur en gardant le <strong>talon au sol</strong>.'},
+      {t:'Progresse',s:'Si genou touche facilement → recule pied de 1-2 cm. Trouve ta <strong>distance maximale</strong>.'},
+      {t:'Reps',s:'<strong>10 répétitions lentes</strong> à cette distance.'}
+    ],
+    ok:'Mesure ta distance pied-mur chaque semaine — elle doit augmenter progressivement !'
+  }
+};
+
+// ===================== PROGRAM DAYS (56 jours) =====================
+const days = [
+  // WEEK 1 - Phase 1
+  {d:1,w:1,ph:1,dow:'Lundi',type:'rest',title:'Repos actif & Mobilité',km:0,dp:0,
+   note:'Première journée du programme. Objectif unique : prendre soin de tes Achilles avec des mouvements doux. Aucune douleur tolérée. Prends note mentalement de ta raideur matinale pour suivre ton évolution.',
+   exs:['ets','ktw']},
+  {d:2,w:1,ph:1,dow:'Mardi',type:'run',title:'Footing 5 km — Plat absolu',km:5,dp:0,
+   note:'Allure conversation — si tu ne peux pas parler normalement, tu vas trop vite. Plat uniquement, surveille tes Achilles. Heel drops obligatoires dans l\'heure après la course.',
+   run:{km:5,dp:0,intensity:'Très facile (FC < 70%)',tips:'Plat uniquement · Allure conversation · Stop si douleur Achille > 2/10'},
+   exs:['hds']},
+  {d:3,w:1,ph:1,dow:'Mercredi',type:'strength',title:'Renforcement & Mobilité',km:0,dp:0,
+   note:'Journée renforcement. Fais les exercices dans l\'ordre indiqué. C\'est la séance la plus importante de la semaine pour ton tendon.',
+   exs:['hds','hdg','cpu','ets','ktw']},
+  {d:4,w:1,ph:1,dow:'Jeudi',type:'run',title:'Footing 5 km — Même allure',km:5,dp:0,
+   note:'Même protocole que mardi. Surveille si la douleur Achille est différente de mardi — en mieux ou en moins bien. Cette info est précieuse.',
+   run:{km:5,dp:0,intensity:'Très facile (FC < 70%)',tips:'Plat · Compare tes sensations à mardi · Heel drops après'},
+   exs:['hds']},
+  {d:5,w:1,ph:1,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,
+   note:'Repos complet. Le repos fait partie de l\'entraînement — c\'est pendant cette phase que tes tendons se renforcent réellement. Résiste à l\'envie de courir.',
+   exs:[]},
+  {d:6,w:1,ph:1,dow:'Samedi',type:'run',title:'Footing 5 km — Légèrement dynamique',km:5,dp:0,
+   note:'Si aucune douleur Achille cette semaine, tu peux mettre un peu plus d\'allant. Sinon, même allure que les jours précédents. Heel drops après.',
+   run:{km:5,dp:0,intensity:'Facile à modérée si sans douleur',tips:'Terrain plat · Légèrement plus dynamique si OK · Heel drops après'},
+   exs:['hds']},
+  {d:7,w:1,ph:1,dow:'Dimanche',type:'rest',title:'Repos total',km:0,dp:0,
+   note:'Repos complet ou surf si des vagues se présentent. Le surf est excellent : proprioception naturelle de la cheville, gainage, sans charge verticale sur l\'Achille.',
+   exs:[]},
+
+  // WEEK 2 - Phase 1
+  {d:8,w:2,ph:1,dow:'Lundi',type:'rest',title:'Repos actif',km:0,dp:0,
+   note:'Début de semaine 2. Compare ta raideur matinale des Achilles à celle de la semaine dernière. Elle devrait commencer à diminuer.',
+   exs:['ets','ktw']},
+  {d:9,w:2,ph:1,dow:'Mardi',type:'run',title:'Footing 6 km — Légères montées possibles',km:6,dp:30,
+   note:'Tu peux intégrer de légères montées (pente < 5%) si l\'Achille est calme. C\'est la première réintroduction progressive du dénivelé. Heel drops après.',
+   run:{km:6,dp:30,intensity:'Facile (FC < 72%)',tips:'Légères montées < 5% possibles · Surveille l\'Achille en côte · Heel drops après'},
+   exs:['hds']},
+  {d:10,w:2,ph:1,dow:'Mercredi',type:'strength',title:'Renforcement complet',km:0,dp:0,
+   note:'Renforcement complet avec gainage cette semaine. Le Bulgarian split squat entre en jeu — prends le temps de bien te positionner.',
+   exs:['hds','hdg','cpu','bss','gla','ets','ktw']},
+  {d:11,w:2,ph:1,dow:'Jeudi',type:'run',title:'Footing 6 km — Terrain varié léger',km:6,dp:20,
+   note:'Terrain légèrement varié. Continue à surveiller les Achilles. Heel drops après la course.',
+   run:{km:6,dp:20,intensity:'Facile (FC < 72%)',tips:'Terrain naturel léger · Allure confort · Heel drops après'},
+   exs:['hds']},
+  {d:12,w:2,ph:1,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,
+   note:'Repos. Profites-en pour noter mentalement tes sensations Achille de cette semaine comparées à la semaine 1.',
+   exs:[]},
+  {d:13,w:2,ph:1,dow:'Samedi',type:'run',title:'Sortie longue 6 km — Terrain plat-léger',km:6,dp:30,
+   note:'Première "sortie longue" du programme — même si 6 km reste très accessible. L\'objectif est de tester la durée d\'effort, pas l\'intensité.',
+   run:{km:6,dp:30,intensity:'Très facile',tips:'Terrain varié plat-léger · Durée > intensité · Heel drops après'},
+   exs:['hds']},
+  {d:14,w:2,ph:1,dow:'Dimanche',type:'rest',title:'Repos ou surf 🏄',km:0,dp:0,
+   note:'Repos. Bilan de fin de S2 : si l\'Achille est asymptomatique (pas de douleur au réveil, pas de douleur persistante), tu passes en Phase 2 lundi. Sinon, on répète S1.',
+   exs:[]},
+
+  // WEEK 3 - Phase 2
+  {d:15,w:3,ph:2,dow:'Lundi',type:'rest',title:'Repos actif — Début Phase 2',km:0,dp:0,
+   note:'Bienvenue en Phase 2 ! Si tu es là, c\'est que ton Achille est en bonne voie. Le volume et le D+ augmentent progressivement cette semaine.',
+   exs:['ets','ktw']},
+  {d:16,w:3,ph:2,dow:'Mardi',type:'run',title:'7 km trail — 1 côte progressive',km:7,dp:60,
+   note:'Première vraie séance trail avec une côte. Aborde la montée tranquillement — surveille les sensations Achille en côte. Heel drops après.',
+   run:{km:7,dp:60,intensity:'Facile à modérée',tips:'1 côte progressive intégrée · Trail facile · Surveille Achille en montée'},
+   exs:['hds']},
+  {d:17,w:3,ph:2,dow:'Mercredi',type:'strength',title:'Renforcement excentrique + foulée',km:0,dp:0,
+   note:'En plus des exercices, travaille ta cadence de foulée sur un tapis ou dans la rue : vise 170-180 pas/min sur 5 min. Une cadence haute réduit le stress sur le mollet.',
+   exs:['hds','hdg','cpu','bss','gla','ktw']},
+  {d:18,w:3,ph:2,dow:'Jeudi',type:'run',title:'7 km — Accélérations légères',km:7,dp:40,
+   note:'3 légères accélérations de 200m — pas de sprint, juste un changement de rythme. Observe comment l\'Achille réagit au changement d\'allure.',
+   run:{km:7,dp:40,intensity:'Facile avec 3×200m légèrement plus rapides',tips:'Accélérations 200m × 3 · Pas de sprint · Heel drops après'},
+   exs:['hds']},
+  {d:19,w:3,ph:2,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Tu approches de ta première vraie sortie trail longue demain.',exs:[]},
+  {d:20,w:3,ph:2,dow:'Samedi',type:'run',title:'Sortie longue 8 km trail — 100-150 D+',km:8,dp:130,
+   note:'Premier vrai format trail long ! 100-150 D+, allure endurance totale. Porte les Salomon Genesis si tu les as. Teste ton hydratation. Heel drops après.',
+   run:{km:8,dp:130,intensity:'Endurance (FC 65-75%)',tips:'Premier trail avec D+ significatif · Allure endurance totale · Tester matériel'},
+   exs:['hds']},
+  {d:21,w:3,ph:2,dow:'Dimanche',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Bilan de la semaine 3 — comment a réagi l\'Achille sur les côtes ?',exs:[]},
+
+  // WEEK 4 - Phase 2
+  {d:22,w:4,ph:2,dow:'Lundi',type:'rest',title:'Repos',km:0,dp:0,note:'Début semaine 4, dernière semaine de Phase 2. Le volume monte encore un peu cette semaine.',exs:['ets','ktw']},
+  {d:23,w:4,ph:2,dow:'Mardi',type:'run',title:'8 km trail — Quelques côtes',km:8,dp:80,
+   note:'Sortie trail avec quelques côtes à allure naturelle. Commence à sentir le "trail feeling" revenir.',
+   run:{km:8,dp:80,intensity:'Naturelle — allure trail confort',tips:'Quelques côtes · Allure naturelle · Heel drops après'},
+   exs:['hds']},
+  {d:24,w:4,ph:2,dow:'Mercredi',type:'strength',title:'Renforcement + technique montée/descente',km:0,dp:0,
+   note:'Après le renforcement, consacre 15 min à la technique : en montée courte pente (5%), travaille la montée buste en avant, poussée sur l\'avant-pied. En descente, genou fléchi, pas court.',
+   exs:['hds','hdg','cpu','bss','gla','ktw']},
+  {d:25,w:4,ph:2,dow:'Jeudi',type:'run',title:'8 km — 2×5 min allure trail racing',km:8,dp:60,
+   note:'Première vraie séance de qualité ! 2 blocs de 5 min à une allure un peu plus soutenue (mais pas fond de course). Observer comment l\'Achille réagit à l\'intensité.',
+   run:{km:8,dp:60,intensity:'Facile + 2×5 min allure trail racing (75% FC)',tips:'2 blocs de 5 min plus rapides · Récup footing entre · Heel drops après'},
+   exs:['hds']},
+  {d:26,w:4,ph:2,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Grande sortie demain.',exs:[]},
+  {d:27,w:4,ph:2,dow:'Samedi',type:'run',title:'Sortie longue 10 km — 250-350 D+',km:10,dp:300,
+   note:'10 km avec un bon D+ ! Tu retrouves des formats proches d\'avant ta blessure. Allure endurance, profite du terrain. Heel drops après.',
+   run:{km:10,dp:300,intensity:'Endurance (FC 65-75%)',tips:'250-350 D+ · Allure endurance · Profite du terrain · Heel drops après'},
+   exs:['hds']},
+  {d:28,w:4,ph:2,dow:'Dimanche',type:'rest',title:'Repos ou rando légère',km:0,dp:0,note:'Repos ou rando légère si tu veux. Pas de course.',exs:[]},
+
+  // WEEK 5 - Phase 3
+  {d:29,w:5,ph:3,dow:'Lundi',type:'rest',title:'Repos — Début Phase 3',km:0,dp:0,
+   note:'Bienvenue en Phase 3 ! Le trail prend vraiment de l\'ampleur cette semaine. Les séances de qualité arrivent. Reste vigilant sur les Achilles.',
+   exs:['ets','ktw']},
+  {d:30,w:5,ph:3,dow:'Mardi',type:'run',title:'9 km trail varié',km:9,dp:120,
+   note:'Allure naturelle, terrain varié. Commence à attaquer les terrains favorables avec un peu plus de dynamisme.',
+   run:{km:9,dp:120,intensity:'Naturelle — allure trail confort',tips:'Terrain varié · Allure libre sur terrains favorables · Heel drops après'},
+   exs:['hds']},
+  {d:31,w:5,ph:3,dow:'Mercredi',type:'strength',title:'Renforcement + calisthenics',km:0,dp:0,
+   note:'Renforcement + 15 min de calisthenics membres inférieurs (si tu pratiques). Ou remplace par un gainage planaire + exercices de mobilité de hanche.',
+   exs:['hds','hdg','cpu','bss','gla','ets','ktw']},
+  {d:32,w:5,ph:3,dow:'Jeudi',type:'run',title:'9 km — 4×3 min côte',km:9,dp:150,
+   note:'Première vraie séance de côtes ! 4 répétitions de 3 min en montée, récupération en redescendant en jogging. Intensité modérée-soutenue.',
+   run:{km:9,dp:150,intensity:'Modérée-soutenue sur les côtes (78-82% FC)',tips:'4×3 min côte · Récup jogging descente · Surveille Achille en montée · Heel drops après'},
+   exs:['hds']},
+  {d:33,w:5,ph:3,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Grande sortie demain — la première à vraiment ressembler à du trail.',exs:[]},
+  {d:34,w:5,ph:3,dow:'Samedi',type:'run',title:'Sortie longue 12 km — 400-500 D+ 🏔️',km:12,dp:450,
+   note:'C\'est là que le trail feeling revient vraiment. 12 km avec un beau D+, allure endurance pure. Profite du terrain, de la vue, de la liberté retrouvée.',
+   run:{km:12,dp:450,intensity:'Endurance (FC 65-75%)',tips:'Premier vrai "trail feeling" · Allure endurance · Hydratation · Heel drops après'},
+   exs:['hds']},
+  {d:35,w:5,ph:3,dow:'Dimanche',type:'rest',title:'Repos ou surf 🏄',km:0,dp:0,note:'Repos. Tu mérites de souffler après cette semaine.',exs:[]},
+
+  // WEEK 6 - Phase 3
+  {d:36,w:6,ph:3,dow:'Lundi',type:'rest',title:'Repos',km:0,dp:0,note:'Début S6, dernière semaine de Phase 3. Le fractionné trail arrive cette semaine.',exs:['ets','ktw']},
+  {d:37,w:6,ph:3,dow:'Mardi',type:'run',title:'10 km — Finales progressives',km:10,dp:100,
+   note:'Accélère progressivement les 2 derniers kilomètres. Finis la séance plus rapide que tu l\'as commencée — technique de "negative split".',
+   run:{km:10,dp:100,intensity:'Facile + accélération 2 derniers km',tips:'Finales progressives · Négatif split · Heel drops après'},
+   exs:['hds']},
+  {d:38,w:6,ph:3,dow:'Mercredi',type:'strength',title:'Renforcement spécifique',km:0,dp:0,
+   note:'Focus gainage et renforcement du soléaire. Les heel drops deviennent de plus en plus faciles — c\'est bon signe.',
+   exs:['hds','hdg','cpu','bss','gla','ets','ktw']},
+  {d:39,w:6,ph:3,dow:'Jeudi',type:'run',title:'10 km — Fractionné trail 5×4 min',km:10,dp:130,
+   note:'Vraie séance de qualité. 5 répétitions de 4 min à 75-80% FC max, avec 2 min de marche de récupération entre chaque. C\'est l\'intensité qu\'on visait.',
+   run:{km:10,dp:130,intensity:'5×4 min à 75-80% FC max · Récup 2 min marche',tips:'Fractionné trail · Récup marche entre chaque · Intensité modérée-haute · Heel drops après'},
+   exs:['hds']},
+  {d:40,w:6,ph:3,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Grande sortie longue demain.',exs:[]},
+  {d:41,w:6,ph:3,dow:'Samedi',type:'run',title:'Sortie longue 14 km — 600-900 D+',km:14,dp:750,
+   note:'La sortie la plus longue jusqu\'ici. 14 km avec un beau dénivelé. Allure endurance, gestion de l\'effort sur la durée. Teste ton ravitaillement.',
+   run:{km:14,dp:750,intensity:'Endurance (FC 65-75%)',tips:'600-900 D+ · Allure endurance · Tester ravitaillement · Heel drops après'},
+   exs:['hds']},
+  {d:42,w:6,ph:3,dow:'Dimanche',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Bilan Phase 3 : tu es prêt pour la Phase 4 finale.',exs:[]},
+
+  // WEEK 7 - Phase 4
+  {d:43,w:7,ph:4,dow:'Lundi',type:'rest',title:'Repos — Début Phase 4',km:0,dp:0,
+   note:'Bienvenue en Phase 4 — la dernière ligne droite. Cette semaine, on monte en intensité sérieusement. Tu es prêt pour ça.',
+   exs:['ets','ktw']},
+  {d:44,w:7,ph:4,dow:'Mardi',type:'run',title:'11 km trail technique — Attaquer les descentes',km:11,dp:150,
+   note:'Commence à attaquer les descentes avec plus de confiance. Genou fléchi, pas court, regard loin. La descente, ça se travaille aussi.',
+   run:{km:11,dp:150,intensity:'Naturelle — focus technique descente',tips:'Terrain technique · Attaque les descentes · Genou fléchi · Heel drops après'},
+   exs:['hds']},
+  {d:45,w:7,ph:4,dow:'Mercredi',type:'strength',title:'Renforcement maintenance',km:0,dp:0,
+   note:'Les exercices de renforcement deviennent de la maintenance. Tu as déjà construit une base solide ces 6 dernières semaines.',
+   exs:['hds','hdg','cpu','bss','gla']},
+  {d:46,w:7,ph:4,dow:'Jeudi',type:'run',title:'12 km — VMA Côte 8×45 sec',km:12,dp:180,
+   note:'Séance VMA côte ! 8 répétitions de 45 secondes à fond en montée, récupération en redescendant au jogging. Court et intense — c\'est fait pour.',
+   run:{km:12,dp:180,intensity:'8×45 sec VMA côte à fond · Récup jogging descente',tips:'VMA côte · 45 sec à fond · Récup complète entre chaque · Heel drops après'},
+   exs:['hds']},
+  {d:47,w:7,ph:4,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Grande sortie de simulation demain.',exs:[]},
+  {d:48,w:7,ph:4,dow:'Samedi',type:'run',title:'Sortie longue 15 km — 900-1100 D+ · Simulation course',km:15,dp:1000,
+   note:'Simulation de conditions de course ! 15 km, 1000m D+, allure endurance. Teste tout : chaussures, pack, ravitaillement, stratégie de montée. C\'est une répétition générale.',
+   run:{km:15,dp:1000,intensity:'Endurance · Simulation course',tips:'Simulation conditions réelles · Tester tout le matériel · Ravitaillement · Heel drops après'},
+   exs:['hds']},
+  {d:49,w:7,ph:4,dow:'Dimanche',type:'rest',title:'Repos ou reco légère',km:0,dp:0,note:'Repos ou très légère sortie de récupération 30 min si tu te sens bien.',exs:[]},
+
+  // WEEK 8 - Phase 4
+  {d:50,w:8,ph:4,dow:'Lundi',type:'rest',title:'Repos — Dernière semaine',km:0,dp:0,
+   note:'Dernière semaine du programme. Tu es à quelques jours de retrouver ton niveau complet. Cette semaine conclut 8 semaines de travail sérieux.',
+   exs:['ets','ktw']},
+  {d:51,w:8,ph:4,dow:'Mardi',type:'run',title:'12 km trail — Allure libre',km:12,dp:180,
+   note:'Allure libre. Cours comme tu le sens. Aucune contrainte d\'allure — juste toi et le trail. Comme avant.',
+   run:{km:12,dp:180,intensity:'Libre — ressens ton niveau retrouvé',tips:'Aucune contrainte · Allure instinctive · Heel drops après'},
+   exs:['hds']},
+  {d:52,w:8,ph:4,dow:'Mercredi',type:'strength',title:'Renforcement final + gainage',km:0,dp:0,
+   note:'Dernière séance de renforcement du programme. Profites-en pour mesurer tes progrès : ta distance pied-mur, la facilité des heel drops, ta force en Bulgarian.',
+   exs:['hds','hdg','cpu','bss','gla','ets','ktw']},
+  {d:53,w:8,ph:4,dow:'Jeudi',type:'run',title:'12 km — Allure trail racing',km:12,dp:160,
+   note:'Cours à l\'allure que tu viserais en course. Pas à fond, mais à l\'allure "effort soutenu confortable". Tu vas te surprendre.',
+   run:{km:12,dp:160,intensity:'Trail racing (78-85% FC)',tips:'Allure course · Effort soutenu confortable · Heel drops après'},
+   exs:['hds']},
+  {d:54,w:8,ph:4,dow:'Vendredi',type:'rest',title:'Repos',km:0,dp:0,note:'Repos. Grande sortie finale demain. La sortie de la semaine 8.',exs:[]},
+  {d:55,w:8,ph:4,dow:'Samedi',type:'run',title:'Grande sortie 18-20 km — 1200-1500 D+ 🏔️🎉',km:19,dp:1350,
+   note:'C\'est LA sortie. 18-20 km avec 1200-1500 D+. La Sicile en juillet, c\'est exactement ce format. Tu es de retour, complètement. Profite de chaque mètre.',
+   run:{km:19,dp:1350,intensity:'Endurance — profite de chaque mètre',tips:'Grande sortie finale · Format Sicile · Allure endurance · Ravitaillement · Savoure'},
+   exs:['hds']},
+  {d:56,w:8,ph:4,dow:'Dimanche',type:'rest',title:'Repos actif — Programme terminé 🎉',km:0,dp:0,
+   note:'Tu as terminé le programme complet. 8 semaines de travail, de patience et de régularité. Ton soléaire et tes Achilles sont solides. La Sicile en juillet, c\'est dans la poche.',
+   exs:[]}
+];
+
+const phaseColors = {1:'#ef4444',2:'#f97316',3:'#22c55e',4:'#818cf8'};
+const phaseNames = {1:'Phase 1 — Reset',2:'Phase 2 — Reconstruction',3:'Phase 3 — Trail & D+',4:'Phase 4 — Pleine intensité'};
+const weekKm = [15,18,22,26,30,34,38,42];
+
+// ===================== STATE =====================
+let state = {currentDay:1, completedDays:[], startDate:null};
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('trailProgressV2');
+    if (s) state = JSON.parse(s);
+  } catch(e) {}
+  updateMainPageStats();
+}
+
+function saveState() {
+  try { localStorage.setItem('trailProgressV2', JSON.stringify(state)); } catch(e) {}
+  updateMainPageStats();
+}
+
+function updateMainPageStats() {
+  const d = state.currentDay;
+  const w = days[d-1].w;
+  const ph = days[d-1].ph;
+  const done = state.completedDays.length;
+  const pct = Math.round((done/56)*100);
+  document.getElementById('ps-day').textContent = d + ' / 56';
+  document.getElementById('ps-week').textContent = w + ' / 8';
+  document.getElementById('ps-phase').textContent = ph;
+  document.getElementById('ps-done').textContent = done;
+  document.getElementById('pb-fill').style.width = pct + '%';
+  document.getElementById('pb-pct').textContent = pct + '%';
+  document.getElementById('pb-label').textContent = done === 0 ? 'Début du programme' : done + ' jour' + (done>1?'s':'') + ' complété' + (done>1?'s':'');
+}
+
+// ===================== TRACKER =====================
+function openTracker() {
+  document.getElementById('mainPage').style.display = 'none';
+  const tp = document.getElementById('trackerPage');
+  tp.classList.add('visible');
+  renderDay(state.currentDay);
+}
+
+function closeTracker() {
+  document.getElementById('trackerPage').classList.remove('visible');
+  document.getElementById('mainPage').style.display = 'block';
+}
+
+function renderDay(dayNum) {
+  const day = days[dayNum - 1];
+  state.currentDay = dayNum;
+
+  // Header
+  document.getElementById('tr-eyebrow').textContent = phaseNames[day.ph] + ' · Semaine ' + day.w;
+  document.getElementById('tr-title').textContent = day.dow + ' — ' + day.title;
+  document.getElementById('tr-badge').textContent = 'J' + dayNum + '/56';
+
+  // Phase chip color (update header border)
+  document.querySelector('.tr-header').style.borderBottomColor = phaseColors[day.ph];
+
+  // Circular progress — CSS conic-gradient
+  const done = state.completedDays.length;
+  const pctNum = Math.round((done / 56) * 100);
+  const color = phaseColors[day.ph];
+  const circ = document.getElementById('circProgress');
+  circ.style.background = `conic-gradient(${color} 0% ${pctNum}%, #1e3024 ${pctNum}% 100%)`;
+  document.getElementById('circNum').textContent = pctNum + '%';
+
+  // Week chart
+  renderWeekBars(day.w);
+
+  // Quote + funfact
+  document.getElementById('dayQuote').textContent = '"' + quotes[dayNum % quotes.length] + '"';
+  document.getElementById('dayFunfact').textContent = funfacts[dayNum % funfacts.length];
+
+  // Day note
+  document.getElementById('dayNote').innerHTML = day.note;
+
+  // Day content
+  renderDayContent(day);
+
+  // Navigation
+  document.getElementById('btnPrev').disabled = dayNum <= 1;
+  document.getElementById('btnPrev').style.opacity = dayNum <= 1 ? '0.4' : '1';
+
+  const isCompleted = state.completedDays.includes(dayNum);
+  const isLast = dayNum >= 56;
+  const btnNext = document.getElementById('btnNext');
+  if (isLast) {
+    btnNext.textContent = '🎉 Programme terminé !';
+    btnNext.className = 'btn-next completed';
+  } else if (isCompleted) {
+    btnNext.innerHTML = 'Jour suivant →';
+    btnNext.className = 'btn-next';
+  } else {
+    btnNext.innerHTML = 'Valider & Jour suivant →';
+    btnNext.className = 'btn-next';
+  }
+}
+
+
+function renderWeekBars(currentWeek) {
+  const maxKm = 42;
+  const phColors = {1:"#ef4444",2:"#f97316",3:"#22c55e",4:"#818cf8"};
+  const phaseOf = [1,1,2,2,3,3,4,4];
+  let html = "";
+  weekKm.forEach((km, i) => {
+    const w = i + 1;
+    const pct = Math.round((km / maxKm) * 100);
+    const isDone = w < currentWeek;
+    const isCurrent = w === currentWeek;
+    const color = isDone ? phColors[phaseOf[i]] : isCurrent ? phColors[phaseOf[i]] + "99" : "#1e3024";
+    const opacity = isDone ? "1" : isCurrent ? "0.7" : "0.25";
+    html += `<div class="week-bar-row">`;
+    html += `<span class="wb-label" style="opacity:${opacity}">S${w}</span>`;
+    html += `<div class="wb-track"><div class="wb-fill" style="width:${isCurrent||isDone?pct:0}%;background:${color}"></div></div>`;
+    html += `<span class="wb-km" style="opacity:${opacity}">${km}k</span>`;
+    html += `</div>`;
+  });
+  document.getElementById("weekBars").innerHTML = html;
+}
+
+function renderDayContent(day) {
+  const container = document.getElementById('dayContent');
+  let html = '';
+
+  if (day.type === 'rest' && day.exs.length === 0) {
+    const emoji = day.d === 56 ? '🎉' : (day.dow === 'Dimanche' ? '🏄' : '😴');
+    const subtitle = day.d === 56
+      ? 'Programme 8 semaines terminé. Ton soléaire et tes Achilles sont solides. La Sicile est dans la poche.'
+      : 'Le repos fait partie de l\'entraînement. C\'est pendant ces phases que les tendons se renforcent réellement.';
+    html = `<div class="rest-day"><span class="emoji">${emoji}</span><h3>${day.title}</h3><p>${subtitle}</p></div>`;
+  } else {
+    if (day.run) {
+      html += `<div class="day-section-label">🏃 Séance course</div>
+      <div class="run-block">
+        <div class="run-block-title">🏃 ${day.title}</div>
+        <div class="run-stats">
+          <div class="run-stat"><div class="rs-label">Distance</div><div class="rs-val">${day.run.km} km</div></div>
+          <div class="run-stat"><div class="rs-label">Dénivelé</div><div class="rs-val">${day.run.dp > 0 ? day.run.dp+'m D+' : 'Plat'}</div></div>
+          <div class="run-stat"><div class="rs-label">Intensité</div><div class="rs-val" style="font-size:0.72rem">${day.run.intensity.split(' ')[0]}</div></div>
+        </div>
+        <div class="run-desc"><strong>Intensité :</strong> ${day.run.intensity}</div>
+        <div class="run-tip">💡 ${day.run.tips}</div>
+      </div>`;
+    }
+    if (day.exs.length > 0) {
+      html += `<div class="day-section-label">💪 Exercices maison</div>`;
+      day.exs.forEach(exId => {
+        const ex = exLib[exId];
+        if (!ex) return;
+        html += buildExCard(ex);
+      });
+    }
+  }
+  container.innerHTML = html;
+}
+
+function buildExCard(ex) {
+  let stepsHtml = ex.steps.map(s =>
+    `<div class="tex-step"><div class="tex-step-n">→</div><div class="tex-step-t"><strong>${s.t} :</strong> ${s.s}</div></div>`
+  ).join('');
+
+  let dosageHtml = ex.dosage ? ex.dosage.map(d =>
+    `<div class="tex-dose"><div class="td-label">${d.l}</div><div class="td-val">${d.v}</div></div>`
+  ).join('') : '';
+
+  const artHtml = ex.art ? `<div class="tex-art">${ex.art}</div>` : '';
+  const okHtml = ex.ok ? `<div class="tex-ok">✅ ${ex.ok}</div>` : '';
+  const warnHtml = ex.warn ? `<div class="tex-warn">⚠️ ${ex.warn}</div>` : '';
+
+  return `
+  <div class="tex-card">
+    <div class="tex-hdr">
+      <div class="tex-num ${ex.nc}" style="background:${ex.nc.includes('g')?'#4ade80':ex.nc.includes('o')?'#fb923c':'#60a5fa'};color:#0a1510">${ex.num}</div>
+      <div class="tex-meta">
+        <div class="tex-name">${ex.name}</div>
+        <div class="tex-sub">${ex.sub}</div>
+      </div>
+    </div>
+    <div class="tex-body">
+      ${artHtml}
+      ${dosageHtml ? `<div class="tex-dosage">${dosageHtml}</div>` : ''}
+      <div class="tex-steps">${stepsHtml}</div>
+      ${okHtml}${warnHtml}
+    </div>
+  </div>`;
+}
+
+function nextDay() {
+  if (state.currentDay >= 56) return;
+  if (!state.completedDays.includes(state.currentDay)) {
+    state.completedDays.push(state.currentDay);
+  }
+  state.currentDay = Math.min(state.currentDay + 1, 56);
+  saveState();
+  renderDay(state.currentDay);
+  document.getElementById('trackerPage').scrollTo(0, 0);
+}
+
+function prevDay() {
+  if (state.currentDay <= 1) return;
+  state.currentDay = Math.max(state.currentDay - 1, 1);
+  saveState();
+  renderDay(state.currentDay);
+  document.getElementById('trackerPage').scrollTo(0, 0);
+}
+
+// ===================== MAIN PAGE INTERACTIVITY =====================
+function toggleEx(header) {
+  const card = header.closest('.ex-card');
+  card.classList.toggle('open');
+}
+
+function toggleDay(day) {
+  const row = document.getElementById('row-' + day);
+  const detail = document.getElementById('detail-' + day);
+  const isOpen = detail.classList.contains('visible');
+  document.querySelectorAll('.day-detail').forEach(d => d.classList.remove('visible'));
+  document.querySelectorAll('.day-row').forEach(r => r.classList.remove('active'));
+  if (!isOpen) { detail.classList.add('visible'); row.classList.add('active'); }
+}
+
+// ===================== INIT =====================
+
+// Service Worker inline pour mode hors-ligne (PWA iPhone)
+if ("serviceWorker" in navigator) {
+  const swCode = `
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open("trail-v1").then(c => c.addAll(["./"])));
+});
+self.addEventListener("fetch", e => {
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+});
+`;
+  const blob = new Blob([swCode], {type: "application/javascript"});
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+loadState();
+</script>
+</body>
+</html>
