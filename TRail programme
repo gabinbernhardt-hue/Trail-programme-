@@ -1,0 +1,424 @@
+import { useState } from "react";
+ 
+const WEEKS = [
+  {
+    id: 1, label: "S1", title: "Récupération + KOM",
+    dates: "15–21 juin", volume: "21–23 km", dp: "~110–130 m D+",
+    theme: "Récupérer sans perdre l'élan", color: "#4ade80", alert: null,
+    sessions: [
+      { day: "Lun 15", type: "rest", title: "Repos complet", duration: null, km: null, dp: null, zone: null,
+        tip: "J+2 post-course. Récupération musculaire active. Ne cours pas même si tu te sens bien — l'adaptation se fait ici." },
+      { day: "Mar 16", type: "easy", title: "Footing récup", duration: "30–35 min", km: "~5 km", dp: "0 m", zone: "Z1",
+        tip: "Terrain strictement plat. Aucune côte. Allure quasi-marche rapide. Check soléaire à chaque km." },
+      { day: "Mer 17", type: "intense", title: "🏆 KOM", duration: "~20 min total", km: "~2–3 km", dp: "selon segment", zone: "Z5",
+        tip: "Échauffement 10 min → effort max sur le segment → récup 20 min cool down. Ne rajoute aucun volume après l'effort." },
+      { day: "Jeu 18", type: "rest", title: "Repos / Renforcement", duration: "20–25 min", km: null, dp: null, zone: null,
+        tip: "Heel drops excentriques légers (3×10 rép, genou fléchi), gainage. Zéro running." },
+      { day: "Ven 19", type: "easy", title: "Footing easy", duration: "45–50 min", km: "~7 km", dp: "~30 m", zone: "Z2",
+        tip: "Terrain plat ou très légère pente. Conversation fluide du début à la fin. Check soléaire pendant et après." },
+      { day: "Sam 20", type: "rest", title: "Renforcement musculaire", duration: "25–30 min", km: null, dp: null, zone: null,
+        tip: "Heel drops excentriques (3×15), calf raises (3×20), squats (3×15), step-ups (3×12). Voir onglet Soléaire." },
+      { day: "Dim 21", type: "medium", title: "Sortie avec D+ (run/walk)", duration: "55–65 min", km: "~7–8 km", dp: "~80–100 m", zone: "Z2",
+        tip: "Première intro D+ du bloc. Structure run/walk (ex : 8 min course / 2 min marche) plutôt que course continue — la course lente prolongée est identifiée comme un facteur de récidive pour le soléaire en phase précoce. Marche systématiquement les montées si FC monte trop. Descentes contrôlées, pas de freinage brutal." },
+    ]
+  },
+  {
+    id: 2, label: "S2", title: "Construction D+",
+    dates: "22–28 juin", volume: "27–32 km", dp: "~305–365 m D+",
+    theme: "Accumuler le vertical progressivement, protéger le soléaire", color: "#60a5fa", alert: "D+ lissé par rapport à une version initiale de ce plan : montée progressive plutôt qu'un quadruplement en une seule semaine. Aucune littérature ne valide un taux de progression D+ précis — c'est un principe de précaution, pas une donnée chiffrée.",
+    sessions: [
+      { day: "Lun 22", type: "long", title: "Long run D+ (run/walk)", duration: "55–65 min", km: "~7–8 km", dp: "~90–110 m", zone: "Z2",
+        tip: "Structure run/walk sur les portions longues (ex : 10 min course / 2 min marche), pas de course continue prolongée — risque spécifique de récidive pour le soléaire identifié en littérature. Boucles répétées sur tes buttes locales. Marche les portions raides si besoin." },
+      { day: "Mar 23", type: "rest", title: "Repos actif", duration: null, km: null, dp: null, zone: null,
+        tip: "Marche légère, mobilité, étirements. Pas de running. Récupération obligatoire après le long run." },
+      { day: "Mer 24", type: "easy", title: "Footing easy", duration: "35–40 min", km: "~5–6 km", dp: "~25 m", zone: "Z2",
+        tip: "Récupération active. Plat dominant. Si jambes lourdes : raccourcir à 30 min." },
+      { day: "Jeu 25", type: "specific", title: "Séance côtes", duration: "40–45 min", km: "~5–6 km", dp: "~100–120 m", zone: "Z2–Z3",
+        tip: "3–4 répétitions de montée (2–3 min chacune) sur ta butte locale. Descentes contrôlées — appuis courts, pas de freinage sur le talon (risque soléaire)." },
+      { day: "Ven 26", type: "rest", title: "Repos / Renforcement", duration: "25–30 min", km: null, dp: null, zone: null,
+        tip: "Heel drops excentriques (3×15). Si soléaire ok depuis 1 semaine : commencer les calf raises unilatéraux." },
+      { day: "Sam 27", type: "easy", title: "Footing easy", duration: "30–35 min", km: "~4–5 km", dp: "~15 m", zone: "Z2",
+        tip: "Léger. Préserver les jambes pour la sortie de demain." },
+      { day: "Dim 28", type: "medium", title: "Sortie trail medium", duration: "45–55 min", km: "~6–7 km", dp: "~75–95 m", zone: "Z2–Z3",
+        tip: "Varier montées/descentes. Commencer la technique de descente : appuis courts, genou fléchi, regard 3 m devant toi (pas sous tes pieds)." },
+    ]
+  },
+  {
+    id: 3, label: "S3", title: "Spécifique Sicile",
+    dates: "29 juin – 5 juillet", volume: "36–43 km", dp: "~670–830 m D+",
+    theme: "Simuler, tester, préparer",
+    color: "#f59e0b",
+    alert: "Session clé lundi 29 : c'est ta répétition générale Sicile. Teste nutrition, gestion chaleur, gestion du rythme sur long effort. La séance côtes du jeudi reste la priorité spécifique de la semaine.",
+    sessions: [
+      { day: "Lun 29", type: "long", title: "🎯 Sortie longue clé", duration: "1h40–1h55", km: "~12–14 km", dp: "~300–380 m", zone: "Z2",
+        tip: "Session la plus importante du bloc. Cherche un terrain avec plusieurs montées-descentes successives (pas une seule grosse côte) pour reproduire le profil sicilien. Simule aussi : gel à 45 min et 1h30, Nuun dès le départ, gère la chaleur. Si fatigue → réduis la distance, pas l'intensité. Ne saute pas cette session." },
+      { day: "Mar 30", type: "rest", title: "Repos complet", duration: null, km: null, dp: null, zone: null,
+        tip: "Récupération obligatoire. Glucides + protéines, sommeil. Ne remplace pas par une sortie easy." },
+      { day: "Mer 1", type: "easy", title: "Footing récup", duration: "35–40 min", km: "~5–6 km", dp: "~20 m", zone: "Z1–Z2",
+        tip: "Très léger. Check soléaire : gêne >3/10 → stop, on réévalue ensemble." },
+      { day: "Jeu 2", type: "specific", title: "🏔️ Séance côtes — priorité n°1", duration: "50–60 min", km: "~6–8 km", dp: "~200–250 m", zone: "Z3",
+        tip: "C'est la séance la plus spécifique de tout le bloc — montée-descente répétée = exactement le profil sicilien en dents de scie. 5–6 répétitions si le soléaire est clean. Descentes contrôlées, appuis courts. Si gêne après la 3ème répétition, arrête-toi là, c'est une info utile pour le jour J." },
+      { day: "Ven 3", type: "rest", title: "Repos / Renforcement", duration: "30 min", km: null, dp: null, zone: null,
+        tip: "Dernier bloc de renfo du cycle. Heel drops, step-ups, gainage. Après ça, on gère la fraîcheur." },
+      { day: "Sam 4", type: "easy", title: "Footing easy", duration: "40–45 min", km: "~6–7 km", dp: "~30 m", zone: "Z2",
+        tip: "Récupération active légère." },
+      { day: "Dim 5", type: "medium", title: "Sortie medium", duration: "50–55 min", km: "~7–8 km", dp: "~120–150 m", zone: "Z2",
+        tip: "Maintien du volume. Tu peux te sentir en très bonne forme cette semaine — c'est normal et c'est bon signe. Ne surcharge pas : la Sicile arrive." },
+    ]
+  },
+  {
+    id: 4, label: "S4", title: "Taper 🎯",
+    dates: "6–12 juillet", volume: "22–24 km", dp: "~200–240 m D+",
+    theme: "Conserver la fraîcheur, pas la forme",
+    color: "#a78bfa",
+    alert: "Le taper est psychologiquement difficile. Jambes qui paraissent lourdes, sensations bizarres → c'est NORMAL. C'est le signal que le travail est intégré. Résiste à l'envie de trop courir.",
+    sessions: [
+      { day: "Lun 6", type: "medium", title: "Sortie medium légère", duration: "50–55 min", km: "~8 km", dp: "~80–100 m", zone: "Z2",
+        tip: "Début du taper. Volume commence à baisser nettement. Sensations parfois lourdes cette semaine : c'est le signe que le travail est fait." },
+      { day: "Mar 7", type: "rest", title: "Repos", duration: null, km: null, dp: null, zone: null, tip: null },
+      { day: "Mer 8", type: "easy", title: "Footing easy", duration: "35–40 min", km: "~5–6 km", dp: "~20 m", zone: "Z2", tip: null },
+      { day: "Jeu 9", type: "specific", title: "Sortie courte D+", duration: "35–40 min", km: "~5–6 km", dp: "~80–100 m", zone: "Z2–Z3",
+        tip: "Quelques relances courtes en côte pour garder la nervosité musculaire. Court mais qualitatif." },
+      { day: "Ven 10", type: "rest", title: "Repos / Mobilité", duration: "20 min", km: null, dp: null, zone: null,
+        tip: "Étirements doux, mobilité chevilles et hanches. Visualisation mentale : imagine le départ du run en Sicile, tes premiers pas, le terrain." },
+      { day: "Sam 11", type: "easy", title: "Footing très léger", duration: "25–30 min", km: "~4 km", dp: "~20 m", zone: "Z1",
+        tip: "Juste pour bouger les jambes et te sentir léger. Aucune performance recherchée." },
+      { day: "Dim 12", type: "rest", title: "Repos ou marche", duration: "20–30 min", km: null, dp: null, zone: null,
+        tip: "Prépare ton matériel, vérifie nutrition, hydratation. Dors tôt. Pas de running." },
+    ]
+  }
+];
+ 
+const ZONES = [
+  { key: "Z1", color: "#22c55e", label: "Z1 — Récupération", rpe: "1–2/10", desc: "Conversation très facile, respiration nasale possible. Allure quasi-marche rapide.", usage: "Récupération active, échauffement" },
+  { key: "Z1–Z2", color: "#86efac", label: "Z1–Z2 — Transition", rpe: "2–3/10", desc: "Très confortable, légère activation. Parle facilement.", usage: "Footings récupération après effort long" },
+  { key: "Z2", color: "#60a5fa", label: "Z2 — Endurance fondamentale", rpe: "3–4/10", desc: "Parle par phrases complètes. Légère sudation. Pourrait tenir des heures. C'est ici que se fait 80% de l'adaptation aérobie.", usage: "Base de la majorité des sorties — priorité absolue" },
+  { key: "Z2–Z3", color: "#fbbf24", label: "Z2–Z3 — Transition", rpe: "4–5/10", desc: "Phrases plus courtes. Souffle perceptible. Survient naturellement en côte.", usage: "Montées en côte, terrain varié" },
+  { key: "Z3", color: "#f59e0b", label: "Z3 — Endurance active", rpe: "5–6/10", desc: "Parle par mots courts. Confort appliqué. Commence à chauffer.", usage: "Répétitions côtes, séances spécifiques" },
+  { key: "Z5", color: "#ef4444", label: "Z5 — Maximum", rpe: "9–10/10", desc: "Impossible de parler. Effort maximal court.", usage: "KOM uniquement dans ce bloc" },
+];
+ 
+const SESSION_TYPES = {
+  rest: { color: "#475569", dot: "#64748b", label: "Repos / Renfo" },
+  easy: { color: "#22c55e", dot: "#4ade80", label: "Easy" },
+  medium: { color: "#3b82f6", dot: "#60a5fa", label: "Medium" },
+  long: { color: "#8b5cf6", dot: "#a78bfa", label: "Long run" },
+  specific: { color: "#f59e0b", dot: "#fbbf24", label: "Spécifique D+" },
+  intense: { color: "#ef4444", dot: "#f87171", label: "Intensité" },
+};
+ 
+const ZONE_COLORS = {
+  "Z1": "#22c55e", "Z1–Z2": "#86efac", "Z2": "#60a5fa",
+  "Z2–Z3": "#fbbf24", "Z3": "#f59e0b", "Z5": "#ef4444",
+};
+ 
+export default function TrailCoachPlan() {
+  const [activeWeek, setActiveWeek] = useState(0);
+  const [activeTab, setActiveTab] = useState("plan");
+  const week = WEEKS[activeWeek];
+ 
+  const tabStyle = (id) => ({
+    padding: "8px 13px", borderRadius: 8, border: "none", cursor: "pointer",
+    fontSize: 12, fontWeight: 600, whiteSpace: "nowrap",
+    background: activeTab === id ? "#3b82f6" : "#1e293b",
+    color: activeTab === id ? "white" : "#94a3b8",
+    transition: "all 0.15s"
+  });
+ 
+  return (
+    <div style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif", background: "#0a0f1e", minHeight: "100vh", color: "#e2e8f0", maxWidth: 820, margin: "0 auto", padding: "16px" }}>
+ 
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg, #1a1f35 0%, #1e1035 100%)", borderRadius: 14, padding: "20px 22px", marginBottom: 14, border: "1px solid #2d3561" }}>
+        <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#6b7280", marginBottom: 6 }}>Coaching Trail · Gabin</div>
+        <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 8, letterSpacing: -0.5 }}>⛰️ Bloc Sicile</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 18px", fontSize: 12, color: "#94a3b8", marginBottom: 12 }}>
+          <span>📅 15 juin → 17 juil 2026</span>
+          <span>🎯 18 km / 700 m D+</span>
+          <span>🔴 Soléaire à surveiller</span>
+        </div>
+        <div style={{ padding: "9px 12px", background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.22)", borderRadius: 8, fontSize: 12, color: "#fbbf24", lineHeight: 1.6 }}>
+          ⚡ <strong>Donnée clé (Strava) :</strong> ton record absolu D+ en une seule sortie est de 285 m. Sicile = 700 m cumulés sur la sortie, en profil "dents de scie" (montées/descentes répétées, pas une descente unique géante) et sans objectif de temps. C'est plus favorable que redouté — chaque montée donne une fenêtre de récup au soléaire — mais ça reste 2,45× ton record, sur une journée bien plus longue que tout ce que tu as fait. La préparation clé : les séances de côtes répétées, pas le volume hebdo brut.
+        </div>
+      </div>
+ 
+      <div style={{ background: "linear-gradient(135deg, #1a1f35 0%, #1e1035 100%)", borderRadius: 14, padding: "16px 22px", marginBottom: 14, border: "1px solid #2d3561" }}>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, color: "#a78bfa" }}>🥾 Stratégie jour J — Sicile</div>
+        <div style={{ fontSize: 12, color: "#cbd5e1", lineHeight: 1.7 }}>
+          Pas de chrono = pas d'enjeu à courir les montées. Marche par défaut sur toute pente significative, dès le départ — pas seulement quand tu fatigues. Sur les descentes : appuis courts, pas d'emballement même si tu te sens bien, surtout après la 3ème ou 4ème répétition montée-descente (c'est là que la fatigue du soléaire s'accumule). Objectif réel : finir avec un soléaire intact et avoir pris du plaisir — pas un temps, pas un nombre de km courus vs marchés.
+        </div>
+      </div>
+ 
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 14, overflowX: "auto", paddingBottom: 2 }}>
+        {[
+          { id: "plan", label: "📋 Plan semaine" },
+          { id: "zones", label: "🎯 Zones RPE" },
+          { id: "soleaire", label: "⚠️ Soléaire" },
+          { id: "nutrition", label: "🍎 Nutrition" },
+          { id: "apres", label: "📈 Post-Sicile" },
+        ].map(t => <button key={t.id} onClick={() => setActiveTab(t.id)} style={tabStyle(t.id)}>{t.label}</button>)}
+      </div>
+ 
+      {/* ══════════════ PLAN TAB ══════════════ */}
+      {activeTab === "plan" && (
+        <>
+          {/* Week selector */}
+          <div style={{ display: "flex", gap: 8, marginBottom: 14, overflowX: "auto", paddingBottom: 2 }}>
+            {WEEKS.map((w, i) => (
+              <button key={i} onClick={() => setActiveWeek(i)} style={{
+                flex: "0 0 auto", padding: "10px 13px", borderRadius: 10, cursor: "pointer",
+                border: activeWeek === i ? `2px solid ${w.color}` : "2px solid #1e293b",
+                background: activeWeek === i ? `${w.color}15` : "#1e293b",
+                color: "white", minWidth: 138, textAlign: "left", transition: "all 0.15s"
+              }}>
+                <div style={{ fontSize: 10, color: "#64748b", marginBottom: 2 }}>{w.dates}</div>
+                <div style={{ fontSize: 12, fontWeight: 800, color: activeWeek === i ? w.color : "#e2e8f0", marginBottom: 1 }}>{w.label} — {w.title}</div>
+              </button>
+            ))}
+          </div>
+ 
+          {/* Stats */}
+          <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+            {[
+              { label: "Volume cible", value: week.volume, col: "#60a5fa", size: 17 },
+              { label: "Dénivelé", value: week.dp, col: "#a78bfa", size: 17 },
+              { label: "Focus", value: week.theme, col: "#4ade80", size: 11 },
+            ].map((s, i) => (
+              <div key={i} style={{ flex: 1, background: "#1e293b", borderRadius: 8, padding: "10px 12px", minWidth: 0 }}>
+                <div style={{ fontSize: 10, color: "#64748b", marginBottom: 3 }}>{s.label}</div>
+                <div style={{ fontSize: s.size, fontWeight: 700, color: s.col, lineHeight: 1.3 }}>{s.value}</div>
+              </div>
+            ))}
+          </div>
+ 
+          {/* Alert */}
+          {week.alert && (
+            <div style={{ padding: "9px 13px", background: "rgba(251,191,36,0.07)", border: "1px solid rgba(251,191,36,0.18)", borderRadius: 8, fontSize: 12, color: "#fbbf24", marginBottom: 12, lineHeight: 1.6 }}>
+              ⚡ {week.alert}
+            </div>
+          )}
+ 
+          {/* Mini timeline */}
+          <div style={{ display: "flex", gap: 3, marginBottom: 12, padding: "8px 12px", background: "#1e293b", borderRadius: 8, alignItems: "center" }}>
+            <span style={{ fontSize: 10, color: "#64748b", marginRight: 6 }}>Vue sem.</span>
+            {week.sessions.map((s, i) => (
+              <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+                <div style={{ width: "100%", height: 7, borderRadius: 4, background: SESSION_TYPES[s.type].dot, opacity: s.type === "rest" ? 0.3 : 1 }} />
+                <div style={{ fontSize: 9, color: "#475569" }}>{s.day.slice(0, 2)}</div>
+              </div>
+            ))}
+          </div>
+ 
+          {/* Sessions */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {week.sessions.map((s, i) => {
+              const tc = SESSION_TYPES[s.type];
+              const zc = s.zone ? ZONE_COLORS[s.zone] : null;
+              return (
+                <div key={i} style={{ background: "#1e293b", borderRadius: 10, padding: "12px 14px", borderLeft: `3px solid ${tc.dot}`, opacity: s.type === "rest" ? 0.78 : 1 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 5 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#64748b" }}>{s.day}</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, background: `${tc.dot}20`, color: tc.dot, padding: "2px 7px", borderRadius: 4 }}>{tc.label}</span>
+                    </div>
+                    {zc && <span style={{ fontSize: 10, fontWeight: 800, color: zc, background: "#0f172a", padding: "2px 8px", borderRadius: 4 }}>{s.zone}</span>}
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 5 }}>{s.title}</div>
+                  {s.km && (
+                    <div style={{ display: "flex", gap: 14, fontSize: 11, color: "#94a3b8", marginBottom: 6 }}>
+                      <span>⏱️ {s.duration}</span>
+                      <span>📏 {s.km}</span>
+                      <span>⛰️ {s.dp}</span>
+                    </div>
+                  )}
+                  {s.tip && (
+                    <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6, paddingTop: 7, borderTop: "1px solid #0f172a" }}>
+                      {s.tip}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
+ 
+      {/* ══════════════ ZONES TAB ══════════════ */}
+      {activeTab === "zones" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ background: "#1e293b", borderRadius: 10, padding: "12px 14px", fontSize: 12, color: "#94a3b8", lineHeight: 1.7 }}>
+            <strong style={{ color: "#e2e8f0" }}>Pilotage par RPE</strong> (ressenti) car FC max non calibrée. Pour calibrer : test de 20 min à effort maximal stable (après 3–4 semaines de base stable). FC moyenne des 15 dernières minutes = FC seuil (FTHR) → zones calculées depuis là.
+          </div>
+          {ZONES.map((z) => (
+            <div key={z.key} style={{ background: "#1e293b", borderRadius: 10, padding: "13px 15px", borderLeft: `4px solid ${z.color}` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 5 }}>
+                <span style={{ fontSize: 14, fontWeight: 700 }}>{z.label}</span>
+                <span style={{ fontSize: 11, fontWeight: 800, color: z.color, background: "#0f172a", padding: "2px 9px", borderRadius: 5 }}>RPE {z.rpe}</span>
+              </div>
+              <div style={{ fontSize: 12, color: "#cbd5e1", marginBottom: 4 }}>{z.desc}</div>
+              <div style={{ fontSize: 11, color: "#64748b" }}>→ {z.usage}</div>
+            </div>
+          ))}
+          <div style={{ background: "#162032", border: "1px solid #22c55e33", borderRadius: 10, padding: "12px 14px", fontSize: 12, color: "#4ade80", lineHeight: 1.7 }}>
+            💡 <strong>Règle d'or :</strong> 80% du volume doit être en Z2. Si tu finis un footing easy en Z3 ou en soufflant, tu travailles trop dur et tu accumules de la fatigue sans bénéfice supplémentaire. Ralentis.
+          </div>
+        </div>
+      )}
+ 
+      {/* ══════════════ SOLEAIRE TAB ══════════════ */}
+      {activeTab === "soleaire" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ background: "#1a0a0a", border: "1px solid #ef444430", borderRadius: 10, padding: "13px 15px" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#fca5a5", marginBottom: 9 }}>⛔ Signaux d'alarme → STOP immédiat</div>
+            {["Douleur nocturne ou au repos", "Gonflement visible du mollet", "Douleur > 5/10 pendant l'effort", "Douleur qui augmente en cours de sortie"].map((s, i) => (
+              <div key={i} style={{ fontSize: 12, color: "#fca5a5", padding: "5px 0", borderBottom: i < 3 ? "1px solid #ef444415" : "none" }}>✕ {s}</div>
+            ))}
+          </div>
+ 
+          <div style={{ background: "#1e293b", borderRadius: 10, padding: "13px 15px" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>📋 Checklist journalière</div>
+            {[
+              { when: "Avant", col: "#60a5fa", desc: "Pince le soléaire (sous les jumeaux, mollet profond). 0 douleur = go, mais attention : les douleurs au soléaire apparaissent classiquement après plusieurs km, pas au départ. L'absence de douleur au démarrage ne garantit rien sur la suite." },
+              { when: "Pendant", col: "#fbbf24", desc: "Surveille particulièrement la 2ème moitié de la sortie — c'est là que la tension/douleur soléaire apparaît typiquement. Douleur >3/10 = stop immédiat. Marche retour. Pas de héroïsme : la Sicile est l'objectif, pas la sortie d'aujourd'hui." },
+              { when: "Après", col: "#a78bfa", desc: "Gêne qui dure >2h post-sortie = réduire la charge de 50% le lendemain. Me signaler." },
+            ].map((item, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, paddingBottom: 10, borderBottom: i < 2 ? "1px solid #0f172a" : "none" }}>
+                <span style={{ fontSize: 10, fontWeight: 800, color: item.col, background: "#0f172a", padding: "3px 7px", borderRadius: 5, height: "fit-content", whiteSpace: "nowrap" }}>{item.when}</span>
+                <span style={{ fontSize: 12, color: "#94a3b8", lineHeight: 1.6 }}>{item.desc}</span>
+              </div>
+            ))}
+          </div>
+ 
+          <div style={{ background: "#1e293b", borderRadius: 10, padding: "13px 15px" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>🏋️ Exercices préventifs · 3× / semaine minimum</div>
+            {[
+              { name: "Heel drops excentriques", badge: "Priorité 1", col: "#ef4444", desc: "Sur une marche : monte sur la pointe des pieds → descends LENTEMENT (3–4 sec) avec le genou légèrement fléchi. Cible le soléaire (sous les jumeaux). 3 × 15 rép." },
+              { name: "Calf raises bilatéraux", badge: "Base", col: "#60a5fa", desc: "Montée sur pointes de pieds, 2 sec en haut. 3 × 20 rép. Progresser vers l'unilatéral quand soléaire ok." },
+              { name: "Step-ups contrôlés", badge: "Fonctionnel", col: "#4ade80", desc: "Montée sur une marche, pause 1 sec en haut, descente lente contrôlée. 3 × 12 rép par jambe." },
+              { name: "Squats", badge: "Support global", col: "#a78bfa", desc: "Descente lente, genou dans l'axe du pied. 3 × 15 rép." },
+            ].map((ex, i) => (
+              <div key={i} style={{ marginBottom: 10, paddingBottom: 10, borderBottom: i < 3 ? "1px solid #0f172a" : "none" }}>
+                <div style={{ display: "flex", gap: 7, alignItems: "center", marginBottom: 5 }}>
+                  <span style={{ fontSize: 13, fontWeight: 700 }}>{ex.name}</span>
+                  <span style={{ fontSize: 10, background: "#0f172a", color: ex.col, padding: "1px 6px", borderRadius: 4 }}>{ex.badge}</span>
+                </div>
+                <div style={{ fontSize: 12, color: "#94a3b8", lineHeight: 1.5 }}>{ex.desc}</div>
+              </div>
+            ))}
+          </div>
+ 
+          <div style={{ background: "#162032", border: "1px solid #3b82f630", borderRadius: 10, padding: "11px 14px", fontSize: 12, color: "#93c5fd", lineHeight: 1.7 }}>
+            💡 <strong>Rappel terrain :</strong> les descentes (700 m D− en Sicile) sont le principal facteur de risque pour le soléaire — plus que les montées. L'excentrique en descente charge massivement le muscle. Sois conservateur là-bas.
+          </div>
+ 
+          <div style={{ background: "#1e293b", border: "1px solid #475569", borderRadius: 10, padding: "11px 14px", fontSize: 12, color: "#94a3b8", lineHeight: 1.7 }}>
+            ⚠️ <strong>Limite honnête :</strong> "90%, pas de douleur" est une auto-évaluation, pas un diagnostic. Le temps de récupération réel dépend du site précis de la lésion dans le muscle — une donnée que ni toi ni moi n'avons sans imagerie ou avis pro. Si un doute persiste avant la grosse semaine de charge (S3, avec la sortie longue clé du 29 juin), un avis kiné/médecin du sport sécuriserait ce point avant d'aller plus loin.
+          </div>
+        </div>
+      )}
+ 
+      {/* ══════════════ NUTRITION TAB ══════════════ */}
+      {activeTab === "nutrition" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ background: "#1e293b", borderRadius: 10, padding: "13px 15px" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>🏔️ Run Sicile — Protocole</div>
+            <div style={{ fontSize: 12, color: "#94a3b8", marginBottom: 12, lineHeight: 1.6 }}>
+              Durée estimée : <strong style={{ color: "#e2e8f0" }}>2h30 → 3h30</strong> selon terrain et chaleur. Nord-ouest Sicile en juillet : moyenne autour de 28°C, maximales moyennes ~31°C, pouvant ponctuellement dépasser 32°C (données climatiques San Vito Lo Capo, zone de référence — vérifie la météo réelle des jours précédents ton départ).
+            </div>
+            {[
+              { time: "J−1", col: "#a78bfa", label: "Veille", desc: "Repas riche en glucides complexes (riz, pâtes). Hydratation régulière toute la journée. Évite l'alcool." },
+              { time: "−2h", col: "#60a5fa", label: "Avant départ", desc: "Petit-déjeuner léger testé à l'entraînement. Café si habitude. Pas d'expérimentation new food." },
+              { time: "0 min", col: "#22c55e", label: "Départ", desc: "Nuun Sport dans la poche souple dès le départ. 150–200 ml dans les premiers km." },
+              { time: "45 min", col: "#fbbf24", label: "1er ravito", desc: "1 gel énergétique ou demi-barre. Avec eau obligatoirement — jamais de gel sans eau (risque GI)." },
+              { time: "1h30", col: "#f59e0b", label: "2ème ravito", desc: "1 gel ou fruits secs. Remplir Nuun si source d'eau disponible en route." },
+              { time: "2h15+", col: "#ef4444", label: "Si > 3h", desc: "Gel ou snack salé. Écouter le corps. La nausée en trail vient souvent du manque de sel." },
+            ].map((item, i) => (
+              <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start", padding: "8px 10px", background: "#0f172a", borderRadius: 8, marginBottom: i < 5 ? 6 : 0 }}>
+                <span style={{ fontSize: 10, fontWeight: 800, color: item.col, minWidth: 38, paddingTop: 1 }}>{item.time}</span>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>{item.label}</div>
+                  <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.5 }}>{item.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+ 
+          <div style={{ background: "#1e293b", borderRadius: 10, padding: "13px 15px" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 9 }}>🌡️ Chaleur — points critiques</div>
+            {[
+              "Si > 28°C : débuter à allure très conservative les 20 premières minutes (Z1–Z2 strict)",
+              "S'hydrater toutes les 15–20 min même sans sensation de soif",
+              "Mouiller nuque et poignets si eau disponible en chemin",
+              "À la chaleur, la FC sera plus haute que d'habitude pour la même allure : se fier au RPE, pas à la FC",
+              "Symptômes d'alarme (coup de chaleur) : absence de sueur, confusion → STOP, ombre, hydratation immédiate",
+            ].map((s, i) => (
+              <div key={i} style={{ fontSize: 12, color: "#94a3b8", padding: "5px 0", borderBottom: i < 4 ? "1px solid #0f172a" : "none", lineHeight: 1.5 }}>→ {s}</div>
+            ))}
+          </div>
+ 
+          <div style={{ background: "#162032", border: "1px solid #fbbf2430", borderRadius: 10, padding: "11px 14px", fontSize: 12, color: "#fbbf24", lineHeight: 1.7 }}>
+            🧪 <strong>Règle absolue :</strong> tout ce que tu emportes en Sicile doit avoir été testé à l'entraînement. La sortie longue du <strong>lundi 29 juin</strong> est faite pour ça. Ne teste rien de nouveau le jour J.
+          </div>
+        </div>
+      )}
+ 
+      {/* ══════════════ POST-SICILE TAB ══════════════ */}
+      {activeTab === "apres" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ background: "#1e293b", borderRadius: 10, padding: "13px 15px" }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📈 Roadmap vers l'ultra — framework</div>
+            <div style={{ fontSize: 12, color: "#94a3b8", marginBottom: 14, lineHeight: 1.6 }}>Plan construit en détail après la Sicile selon tes retours, l'état du soléaire, et la progression réelle.</div>
+            {[
+              {
+                phase: "Phase 1", label: "Récupération", timing: "Juil 18 → Août 1", col: "#22c55e",
+                points: [
+                  "Volume −50%, zéro D+ exigeant",
+                  "Renforcement musculaire et mobilité",
+                  "Débriefing Sicile : ce qui a marché, ce qui a cramé",
+                ]
+              },
+              {
+                phase: "Phase 2", label: "Base progressive", timing: "Août → Octobre", col: "#60a5fa",
+                points: [
+                  "Montée progressive vers 40–50 km/sem",
+                  "Sorties régulières avec 300–500 m D+ par session",
+                  "Calibration FC max / zones (test FTHR)",
+                  "Objectif intermédiaire : trail 20–25 km en automne",
+                ]
+              },
+              {
+                phase: "Phase 3", label: "Développement ultra", timing: "Nov → horizon 12 mois", col: "#f59e0b",
+                points: [
+                  "Back-to-back weekends (long sam + medium dim)",
+                  "Premières sorties de nuit si orientation 100 km+",
+                  "Course cible 40–80 km selon progression réelle",
+                ]
+              },
+            ].map((p, i) => (
+              <div key={i} style={{ marginBottom: i < 2 ? 14 : 0, paddingBottom: i < 2 ? 14 : 0, borderBottom: i < 2 ? "1px solid #0f172a" : "none" }}>
+                <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 }}>
+                  <span style={{ fontSize: 10, fontWeight: 800, color: p.col, background: "#0f172a", padding: "2px 7px", borderRadius: 4 }}>{p.phase}</span>
+                  <span style={{ fontSize: 13, fontWeight: 700 }}>{p.label}</span>
+                  <span style={{ fontSize: 10, color: "#64748b", marginLeft: "auto" }}>{p.timing}</span>
+                </div>
+                {p.points.map((pt, j) => (
+                  <div key={j} style={{ fontSize: 12, color: "#94a3b8", padding: "3px 0 3px 12px", borderLeft: `2px solid ${p.col}35`, marginBottom: 3, lineHeight: 1.5 }}>{pt}</div>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div style={{ background: "#1e293b", borderRadius: 10, padding: "11px 14px", fontSize: 12, color: "#475569", lineHeight: 1.6 }}>
+            Le plan post-Sicile sera construit avec les données réelles (Strava, ressenti, soléaire). Ce framework est indicatif — il peut changer selon ta progression.
+          </div>
+        </div>
+      )}
+ 
+      {/* Footer */}
+      <div style={{ marginTop: 13, padding: "9px 14px", background: "#1e293b", borderRadius: 8, fontSize: 11, color: "#475569", textAlign: "center" }}>
+        Plan révisable chaque semaine selon ressenti soléaire · Strava data manquante — me partager les stats clés si besoin d'ajustements fins
+      </div>
+    </div>
+  );
+}
+ 
